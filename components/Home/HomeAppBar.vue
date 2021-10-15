@@ -8,12 +8,11 @@
   >
     <app-logo
       @click.native="$vuetify.goTo('#scroll-top')"
-    />>
-    <v-toolbar-title
+    />
+    <app-title
       class="hidden-mobile-and-down"
-    >
-      {{ appName }}
-    </v-toolbar-title>
+      @click.native="$vuetify.goTo('#scroll-top')"
+    />
 
     <v-spacer />
 
@@ -67,9 +66,9 @@
 </template>
 
 <script>
-import AppSignupButton from '../App/AppSignupButton.vue'
+
 export default {
-  components: { AppSignupButton },
+  components: {},
   props: {
     menus: {
       type: Array,
@@ -80,9 +79,8 @@ export default {
       default: 0
     }
   },
-  data ({ $config: { appName }, $store }) {
+  data ({ $store }) {
     return {
-      appName,
       scrollY: 0,
       homeAppBarHeight: $store.state.styles.homeAppBarHeight
     }

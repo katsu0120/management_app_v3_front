@@ -113,9 +113,9 @@ import member3 from '~/assets/images/member3.png'
 
 export default {
   data () {
-    const twitter = 'https://twitter.com/home'
+    const twitter = 'https://twitter.com/katsu1357911'
     const slack = 'https://join.slack.com'
-    const companyUrl = 'https://twitter.com/home'
+    const companyUrl = 'https://twitter.com/katsu1357911'
     return {
       members: [
         { name: 'サンプル1', position: '代表', img: member1, twitter, slack },
