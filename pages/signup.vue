@@ -2,9 +2,15 @@
   <user-form-card>
     <template #user-form-card-content>
       <v-form v-model="isValid">
-        <user-form-name />
-        <user-form-email />
-        <user-form-password />
+        <user-form-name
+          :name.sync="params.user.name"
+        />
+        <user-form-email
+          :email.sync="params.user.email"
+        />
+        <user-form-password
+          :password.sync="params.user.password"
+        />
         <v-btn
           :disabled="!isValid"
           block
@@ -14,6 +20,7 @@
           登録する
         </v-btn>
       </v-form>
+      {{ params }}
     </template>
   </user-form-card>
 </template>
@@ -23,7 +30,8 @@ export default {
   layout: 'before-login',
   data () {
     return {
-      isValid: false
+      isValid: false,
+      params: { user: { name: '', email: '', password: '' } }
     }
   }
 }
