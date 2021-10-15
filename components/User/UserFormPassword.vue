@@ -4,7 +4,7 @@
     :rules="form.rules"
     :hint="form.hint"
     label="パスワードを入力"
-    placeholder="form.placeholder"
+    :placeholder="form.placeholder"
     :hide-details="!setValidation"
     :counter="setValidation"
     :append-icon="toggle.icon"
