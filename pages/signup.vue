@@ -1,18 +1,20 @@
 <template>
-  <user-form-card #user-form-card-content>
-    <v-form v-model="isValid">
-      <user-form-name />
-      <user-form-email />
-      <user-form-password />
-      <v-btn
-        :disabled="!isValid"
-        block
-        class="white--text"
-        color="appblue"
-      >
-        登録する
-      </v-btn>
-    </v-form>
+  <user-form-card>
+    <template #user-form-card-content>
+      <v-form v-model="isValid">
+        <user-form-name />
+        <user-form-email />
+        <user-form-password />
+        <v-btn
+          :disabled="!isValid"
+          block
+          class="white--text"
+          color="appblue"
+        >
+          登録する
+        </v-btn>
+      </v-form>
+    </template>
   </user-form-card>
 </template>
 
