@@ -16,6 +16,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'vue/valid-v-slot': 'off'
+    // ESlintの推奨方法のコード記載を気にせずに動作をとりあえず見たい時にoffにする
+    // 'vue/valid-v-slot': 'off'
   }
 }
