@@ -41,7 +41,7 @@ export default {
       const min = '8文字以上'
       const msg = `${min}。半角英数字、ﾊｲﾌﾝ、ｱﾝﾀﾞｰﾊﾞｰが使えます`
       // ログインページ=>入力必須=>setValidation=false
-      // 会員登録ページ=>入力必須,8文字以上,72文字以下,書式チェック=>setValidation=true
+      // 会員登録ページ=>入力必須,8文字以上,72文字以下で,書式チェック=>setValidation=true
       const required = v => !!v || ''
       const format = v => /^[\w-]{8,72}$/.test(v) || msg
 
