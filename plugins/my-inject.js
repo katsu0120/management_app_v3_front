@@ -10,6 +10,19 @@ class MyInject {
     const title = this.app.i18n.t(jsonPath)
     return title
   }
+
+  // 日付のフォーマット変換
+  dateFormat (dateStr) {
+    const dateTimeFormat = new Intl.DateTimeFormat(
+      'ja', { dateStyle: 'medium', timeStyle: 'short' }
+    )
+    return dateTimeFormat.format(new Date(dateStr))
+  }
+
+  // プロジェクトリンク
+  projectLinkTo (id, name = 'project-id-dashboard') {
+    return { name, params: { id } }
+  }
 }
 
 // 全てのNuxtの中で$my.メソッドとする事でMyInjectのclassの中で定義しているメソッドを呼び出せる。
