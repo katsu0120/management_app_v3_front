@@ -4,6 +4,7 @@
       <v-form
         ref="form"
         v-model="isValid"
+        @submit.prevent="login"
       >
         <user-form-email
           :email.sync="params.user.email"
@@ -21,12 +22,12 @@
         </v-card-actions>
         <v-card-text class="px-0">
           <v-btn
+            type="submit"
             :disabled="!isValid || loading"
             :loading="loading"
             block
             class="white--text"
             color="appblue"
-            @click="login"
           >
             ログインする
           </v-btn>
