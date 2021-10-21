@@ -74,6 +74,7 @@ import HomeContact from '~/components/Home/HomeContact'
 import HomeCompany from '~/components/Home/HomeCompany'
 
 export default {
+  name: 'PagesIndex',
   components: {
     HomeAbout,
     HomeProducts,

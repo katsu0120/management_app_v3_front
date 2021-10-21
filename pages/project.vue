@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  name: 'PagesProject',
   layout: 'project',
   // falseを返すページのアクセスを制限する
   validate ({ store, route }) {

@@ -20,6 +20,7 @@
 
 <script>
 export default {
+  name: 'PagesAccount',
   layout: 'logged-in',
   // falseを返すページのアクセスを制限する
   validate ({ route }) {
