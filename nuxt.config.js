@@ -54,7 +54,13 @@ export default {
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    // 環境変数API_URLが優先される
+    // baseURL: 'http://localhost:3000'
+    // クロスドメインで認証情報を共有する
+    // https://axios.nuxtjs.org/options/#credentials
+    credentials: true
+  },
 
   vuetify: {
     // カスタムCSSファイルパス
