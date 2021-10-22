@@ -18,5 +18,7 @@ module.exports = {
   rules: {
     // ESlintの推奨方法のコード記載を気にせずに動作をとりあえず見たい時にoffにする
     // 'vue/valid-v-slot': 'off'
+    // Eslintのconsole.log警告をoff
+    'no-console': 'off'
   }
 }
