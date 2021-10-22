@@ -10,6 +10,7 @@
 
 <script>
 export default {
-  name: 'LayoutsLoggedin'
+  name: 'LayoutsLoggedin',
+  middleware: ['authentication']
 }
 </script>
