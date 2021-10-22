@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  name: 'LayoutsProject',
   middleware: ['get-project-list', 'get-project-current'],
   data () {
     return {
