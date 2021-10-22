@@ -9,5 +9,8 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'LayoutsLoggedin',
+  middleware: ['authentication']
+}
 </script>

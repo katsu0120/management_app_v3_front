@@ -1,7 +1,7 @@
 <script>
 export default {
-  //  middlewareはページをレンダリングする前に実行されるメソッドなのでtemplateが不要
-  middleware ({ redirect }) {
+  async middleware ({ $auth, redirect }) {
+    await $auth.logout()
     return redirect('/')
   }
 }

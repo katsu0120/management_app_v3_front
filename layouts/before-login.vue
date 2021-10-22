@@ -2,6 +2,7 @@
   <v-app>
     <before-login-app-bar />
     <v-main>
+      <app-toaster />
       <nuxt />
     </v-main>
     <app-footer />
@@ -9,5 +10,8 @@
 </template>
 
 <script>
-export default {}
+export default {
+  neme: 'LayoutsBeforeLogin',
+  middleware: ['logged-in-redirect']
+}
 </script>

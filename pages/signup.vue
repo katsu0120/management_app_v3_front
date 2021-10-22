@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  name: 'PagesSignup',
   layout: 'before-login',
   data () {
     return {

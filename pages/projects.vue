@@ -142,7 +142,9 @@
 <script>
 import homeImg from '~/assets/images/logged-in/home.png'
 export default {
+  name: 'PagesProjects',
   layout: 'logged-in',
+  middleware: ['get-project-list'],
   data () {
     return {
       homeImg,
