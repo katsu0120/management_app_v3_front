@@ -11,5 +11,7 @@
 
 <script>
 export default {
+  neme: 'LayoutsBeforeLogin',
+  middleware: ['logged-in-redirect']
 }
 </script>

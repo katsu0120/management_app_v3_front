@@ -82,6 +82,7 @@ export default {
     HomeContact,
     HomeCompany
   },
+  middleware: ['logged-in-redirect'],
   data () {
     return {
       imgHeight: 500,
