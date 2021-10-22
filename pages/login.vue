@@ -73,7 +73,9 @@ export default {
     },
     authFailure ({ response }) {
       if (response && response.status === 404) {
-        // TODO トースター出力
+        // トースター出力
+        const msg = 'ユーザーが見つかりません😥'
+        return this.$store.dispatch('getToast', { msg })
       }
       // TODO エラー出力
     }
