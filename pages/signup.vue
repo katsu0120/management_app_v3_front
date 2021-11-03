@@ -25,7 +25,7 @@
           class="white--text"
           color="appblue"
         >
-          登録する
+          登録するaaa
         </v-btn>
       </v-form>
     </template>
@@ -36,26 +36,54 @@
 export default {
   name: 'PagesSignup',
   layout: 'before-login',
-  data () {
+  data ({ $store }) {
     return {
       isValid: false,
       loading: false,
-      params: { user: { name: '', email: '', password: '' } }
+      params: { user: { name: 'test', email: 'user10@example.com', password: 'password' } },
+      // signInPath: $store.state.signIn.signInPath,
+      redirectPath: $store.state.loggedIn.rememberPath,
+      loggedInHomePath: $store.state.loggedIn.homePath
     }
   },
   methods: {
-    signup () {
+    async signup () {
       this.loading = true
-      setTimeout(() => {
-        this.fromRedet()
-        this.loading = false
-      }, 1500)
-    },
-    fromRedet () {
-      this.$refs.form.reset()
-      for (const key in this.params.user) {
-        this.params.user[key] = ''
+      if (this.isValid) {
+        await this.$axios.post('/api/v1/users', this.params)
+          .then(response => this.Successful(response))
+          .catch(error => this.authFailure(error))
+        console.log(this.params)
       }
+      this.loading = false
+    },
+    Successful (response) {
+      console.log(response)
+      // const msg = '登録できました!!'
+      // const color = 'success'
+      confirm('会員登録が完了しました。本当はメールを送りたいです')
+      this.$auth.login(response)
+      // for (const key in this.params.user) {
+      //   this.params.user[key] = ''
+      // }
+      // this.$router.push('/')
+      // this.$store.dispatch('getToast', { msg, color })
+      // this.$auth.login(response)
+      // 記憶ルートリダイレクト
+      this.$router.push(this.redirectPath)
+      // 記憶ルートを初期値に戻す
+      this.$store.dispatch('getRememberPath', this.loggedInHomePath)
+    },
+    authFailure ({ response }) {
+      const msg = 'エラーが発生しております'
+      const color = 'error'
+      this.$store.dispatch('getToast', { msg, color })
+      // if (response && response.status === 404) {
+      //   // トースター出力
+      // //   const msg = 'ユーザーが見つかりません'
+      //   return this.$store.dispatch('getToast', { msg })
+      // }
+      // return this.$my.apiErrorHandler(response)
     }
   }
 }
