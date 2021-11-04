@@ -25,7 +25,7 @@
           class="white--text"
           color="appblue"
         >
-          登録するaaa
+          登録する
         </v-btn>
       </v-form>
     </template>
@@ -61,7 +61,7 @@ export default {
       console.log(response)
       // const msg = '登録できました!!'
       // const color = 'success'
-      confirm('会員登録が完了しました。本当はメールを送りたいです')
+      confirm('会員登録が完了しました')
       this.$auth.login(response)
       // for (const key in this.params.user) {
       //   this.params.user[key] = ''
