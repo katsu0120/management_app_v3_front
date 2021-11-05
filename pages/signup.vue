@@ -44,18 +44,32 @@ export default {
     }
   },
   methods: {
-    signup () {
+    async signup () {
       this.loading = true
-      setTimeout(() => {
-        this.fromRedet()
-        this.loading = false
-      }, 1500)
-    },
-    fromRedet () {
-      this.$refs.form.reset()
-      for (const key in this.params.user) {
-        this.params.user[key] = ''
+      if (this.isValid) {
+        await this.$axios.post('/api/v1/users', this.params)
+          .then(response => this.Successful(response))
+          .catch(error => this.signUpFailure(error))
       }
+      this.loading = false
+    },
+    Successful (response) {
+      alert('会員登録が完了しました')
+      location.reload()
+      // TODO
+      // Toastデザイン。メール認証実装時はhomeにredirect
+      // const msg = '登録できました!!'
+      // const color = 'success'
+      // this.$store.dispatch('getToast', { msg, color })
+      // this.$auth.login(response)
+      // setTimeout(() => {
+      //   location.reload()
+      // }, 1500)
+    },
+    signUpFailure ({ response }) {
+      const msg = 'すでに会員登録されております'
+      const color = 'error'
+      this.$store.dispatch('getToast', { msg, color })
     }
   }
 }
