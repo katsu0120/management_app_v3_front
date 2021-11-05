@@ -54,7 +54,7 @@ class Authentication {
   // ログアウト業務
   async logout () {
     await this.$axios.$delete(
-      '/api/v1/users',
+      '/api/v1/auth_token',
       { validateStatus: status => this.resolveUnauthorized(status) }
     )
     this.resetVuex()

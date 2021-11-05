@@ -36,14 +36,12 @@
 export default {
   name: 'PagesSignup',
   layout: 'before-login',
-  data ({ $store }) {
+  data () {
     return {
       isValid: false,
       loading: false,
-      params: { user: { name: 'test', email: 'user10@example.com', password: 'password' } },
-      // signInPath: $store.state.signIn.signInPath,
-      redirectPath: $store.state.loggedIn.rememberPath,
-      loggedInHomePath: $store.state.loggedIn.homePath
+      // TODO 削除する
+      params: { user: { name: 'test', email: 'user10@example.com', password: 'password' } }
     }
   },
   methods: {
@@ -52,38 +50,27 @@ export default {
       if (this.isValid) {
         await this.$axios.post('/api/v1/users', this.params)
           .then(response => this.Successful(response))
-          .catch(error => this.authFailure(error))
-        console.log(this.params)
+          .catch(error => this.signUpFailure(error))
       }
       this.loading = false
     },
     Successful (response) {
-      console.log(response)
+      alert('会員登録が完了しました')
+      location.reload()
+      // TODO
+      // Toastデザイン。メール認証実装時はhomeにredirect
       // const msg = '登録できました!!'
       // const color = 'success'
-      confirm('会員登録が完了しました')
-      this.$auth.login(response)
-      // for (const key in this.params.user) {
-      //   this.params.user[key] = ''
-      // }
-      // this.$router.push('/')
       // this.$store.dispatch('getToast', { msg, color })
       // this.$auth.login(response)
-      // 記憶ルートリダイレクト
-      this.$router.push(this.redirectPath)
-      // 記憶ルートを初期値に戻す
-      this.$store.dispatch('getRememberPath', this.loggedInHomePath)
+      // setTimeout(() => {
+      //   location.reload()
+      // }, 1500)
     },
-    authFailure ({ response }) {
-      const msg = 'エラーが発生しております'
+    signUpFailure ({ response }) {
+      const msg = 'すでに会員登録されております'
       const color = 'error'
       this.$store.dispatch('getToast', { msg, color })
-      // if (response && response.status === 404) {
-      //   // トースター出力
-      // //   const msg = 'ユーザーが見つかりません'
-      //   return this.$store.dispatch('getToast', { msg })
-      // }
-      // return this.$my.apiErrorHandler(response)
     }
   }
 }

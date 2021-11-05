@@ -1,8 +1,8 @@
 export default async ({ $auth, $axios, store, route, redirect, isDev }) => {
   if ($auth.isExistUserAndExpired()) {
     if (isDev) {
-      // Todo削除?
-      console.log('Execute silent refresh!!')
+      // Todo削除
+      // console.log('Execute silent refresh!!')
     }
     await $axios.$post('/api/v1/auth_token/refresh')
       .then(response => $auth.login(response))
