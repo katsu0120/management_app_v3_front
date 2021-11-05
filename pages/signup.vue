@@ -40,8 +40,7 @@ export default {
     return {
       isValid: false,
       loading: false,
-      // TODO 削除する
-      params: { user: { name: 'test', email: 'user10@example.com', password: 'password' } }
+      params: { user: { name: '', email: '', password: '' } }
     }
   },
   methods: {
