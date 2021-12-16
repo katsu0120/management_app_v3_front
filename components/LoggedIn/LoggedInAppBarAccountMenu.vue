@@ -65,8 +65,10 @@ export default {
   data () {
     return {
       menus: [
-        { name: 'account-settings', icon: 'mdi-account-cog' },
-        { name: 'account-password', icon: 'mdi-lock-outline' },
+        // TODO 削除
+        // { name: 'account-settings', icon: 'mdi-account-cog' },
+        { name: 'account-mypage', icon: 'mdi-account' },
+        { name: 'account-settings', icon: 'mdi-cog' },
         { name: 'logout', icon: 'mdi-logout-variant', divider: true }
       ]
     }

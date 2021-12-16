@@ -16,9 +16,15 @@
     </nuxt-link>
 
     <!-- app title -->
-    <app-title
-      :class="{ 'hidden-mobile-and-down' : isNotHomePath }"
-    />
+    <nuxt-link
+      :to="homePath"
+      dark
+      class="text-decoration-none"
+    >
+      <app-title
+        :class="{ 'hidden-mobile-and-down' : isNotHomePath }"
+      />
+    </nuxt-link>
 
     <!-- page title -->
     <logged-in-app-bar-breadcrumbs

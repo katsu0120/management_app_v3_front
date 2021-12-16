@@ -3,9 +3,9 @@
     v-model="setName"
     :rules="rules"
     :counter="max"
-    label="ユーザー名を入力"
     placeholder="あなたの表示名"
     outlined
+    label="ユーザー名を入力"
   />
 </template>
 

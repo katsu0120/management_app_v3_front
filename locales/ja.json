@@ -15,8 +15,9 @@
     "login" : "ログイン",
     "logout": "ログアウト",
     "account": {
-      "settings": "アカウント設定",
-      "password": "パスワード変更"
+      "settings": "設定",
+      "password": "パスワード変更",
+      "mypage": "マイページ"
     },
     "project": {
       "id": {
