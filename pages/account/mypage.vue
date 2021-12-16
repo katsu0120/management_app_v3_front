@@ -151,9 +151,9 @@ export default {
     },
     profileEditComplete (response) {
       // TODO削除
-      console.log('この下がprofileレスポンス')
-      console.log(response)
-      console.log(response.user_profile)
+      // console.log('この下がprofileレスポンス')
+      // console.log(response)
+      // console.log(response.user_profile)
       // TODO削除。時間があればトースト設置
       alert('プロフィールの更新が完了しました')
       location.reload('ユーザー名の更新が完了しました')

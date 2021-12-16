@@ -104,12 +104,6 @@ export default {
       this.params.user.password = response.data.password
       this.params.user.id = response.data.id
       this.params.user.user_profile = response.data.user_profile
-      // TODO削除
-      console.log(this.params.user.name)
-      console.log(this.params.user.email)
-      console.log(this.params.user.id)
-      console.log(this.params.user.password)
-      console.log(this.params.user.user_profile)
     },
     async UserMailEdit () {
       this.loading = true
@@ -137,11 +131,6 @@ export default {
       this.loading = false
     },
     profileEditComplete (response) {
-      // TODO削除
-      console.log('この下がprofileレスポンス')
-      console.log(response)
-      console.log(response.user_profile)
-      // TODO削除。時間があればトースト設置
       alert('プロフィールの更新が完了しました')
       location.reload('ユーザー名の更新が完了しました')
     },
