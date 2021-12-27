@@ -1,3 +1,4 @@
-// export default async ({ store, params }) => {
-//   return await store.dispatch('getCurrentProject', params)
-// }
+export default async ({ store, $axios }) => {
+  await $axios.get('/api/v1/users')
+    .then(user => store.dispatch('getCurrentUserInformation', user))
+}

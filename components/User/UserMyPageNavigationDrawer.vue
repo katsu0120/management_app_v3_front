@@ -63,11 +63,6 @@ export default {
       navMenus: [
         { name: 'account-mypage', icon: 'mdi-card-account-details-outline' },
         { name: 'account-settings', icon: 'mdi-cog' }
-        // TODO変更予定
-        // { name: 'account-password', icon: 'mdi-lock-outline' }
-        // { name: 'project-id-help', icon: 'mdi-help-circle' }
-        // { name: 'project-id-dashboard', icon: 'mdi-help-circle' }
-        // dashboardPath: 'project-id-dashboard'
       ]
     }
   },

@@ -45,7 +45,6 @@ export default {
     return {
       isValid: false,
       loading: false,
-      // TODO 削除
       params: { auth: { email: '', password: '' } },
       redirectPath: $store.state.loggedIn.rememberPath,
       loggedInHomePath: $store.state.loggedIn.homePath

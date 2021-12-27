@@ -4,8 +4,8 @@
   >
     <v-parallax>
       <v-img
-        :src="homeImg"
-        alt="homeImg"
+        :src="dashboardImg"
+        alt="dashboardImg"
         :aspect-ratio="16/9"
         gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
       >
@@ -24,7 +24,7 @@
               <v-card-title
                 class="white--text"
               >
-                最近のプロジェクト
+                完了したプロジェクト
               </v-card-title>
 
               <v-divider
@@ -35,34 +35,6 @@
               <v-row
                 align="center"
               >
-                <!-- プロジェクトの追加 -->
-                <v-col
-                  cols="12"
-                  :sm="card.sm"
-                  :md="card.md"
-                >
-                  <v-btn
-                    block
-                    :height="card.height"
-                    :elevation="card.elevation"
-                    to="/newProject"
-                  >
-                    <div>
-                      <v-icon
-                        size="24"
-                        color="myblue"
-                        class="my-2 pl-10"
-                      >
-                        mdi-plus
-                      </v-icon>
-                      <div
-                        class="caption myblue--text"
-                      >
-                        プロジェクトを追加
-                      </div>
-                    </div>
-                  </v-btn>
-                </v-col>
                 <!-- 最近のプロジェクト -->
                 <v-col
                   v-for="(project, i) in incompleteProjects.slice(0, 2)"
@@ -110,7 +82,7 @@
           :md="container.md"
         >
           <v-card-title>
-            プロジェクト一覧
+            完了したプロジェクト
           </v-card-title>
 
           <v-divider class="mb-4" />
@@ -119,6 +91,7 @@
             :headers="tableHeaders"
             :items="incompleteProjects"
             item-key="id"
+            :sort-desc="['updated_at']"
           >
             <template #[`item.id`]="{ item }">
               {{ item.id }}
@@ -148,14 +121,14 @@
 </template>
 
 <script>
-import homeImg from '~/assets/images/logged-in/home.png'
+import dashboardImg from '~/assets/images/logged-in/Data storage_Monochromatic.png'
 export default {
   name: 'PagesProjects',
   layout: 'logged-in',
   middleware: ['get-project-list'],
   data () {
     return {
-      homeImg,
+      dashboardImg,
       container: {
         sm: 10,
         md: 8
@@ -183,11 +156,11 @@ export default {
         return 0
       })
     },
-    // completed:falseステータスのprojectsを返す
+    // 完了したステータスのprojectsを返す
     incompleteProjects () {
       const projectList = []
       this.recentProjects.forEach((project) => {
-        if (!project.completed) {
+        if (project.completed) {
           projectList.push(project)
         }
       })

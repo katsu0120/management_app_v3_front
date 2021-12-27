@@ -21,23 +21,34 @@
           </v-icon>
           ユーザー名
         </v-card-subtitle>
-        <v-card-actions class="mr-15 py-0">
-          <v-text-field
-            v-model="params.user.name"
-            label="name"
-            :rules="nameRules"
-            :counter="max"
-            placeholder="あなたの表示名"
-          />
-          <v-btn
-            color="primary"
-            class="mr-15 ml-5 mb-4"
-            :loading="loading"
-            @click="UserNameEdit"
+        <v-row>
+          <v-col
+            cols="12"
+            xs="12"
+            sm="10"
+            md="10"
+            lg="10"
+            xl="10"
           >
-            更新
-          </v-btn>
-        </v-card-actions>
+            <v-card-actions>
+              <v-text-field
+                v-model="userinformation.name"
+                label="name"
+                :rules="nameRules"
+                :counter="max"
+                placeholder="あなたの表示名"
+              />
+              <v-btn
+                color="primary"
+                class="ml-2 mb-4"
+                :loading="loading"
+                @click="UserNameEdit"
+              >
+                更新
+              </v-btn>
+            </v-card-actions>
+          </v-col>
+        </v-row>
       </v-card-text>
 
       <v-divider
@@ -50,15 +61,27 @@
           </v-icon>
           プロフィール文
         </v-card-subtitle>
-        <v-card-actions class="mr-15 py-0">
-          <v-textarea
-            v-model="params.user.user_profile"
-            label="profile"
-            auto-grow
-            placeholder="ご自身のプロフィール入力"
-            outlined
-          />
-        </v-card-actions>
+        <v-row>
+          <v-col
+            cols="12"
+            xs="12"
+            sm="10"
+            md="10"
+            lg="10"
+            xl="10"
+          >
+            <v-card-actions>
+              <v-textarea
+                v-model="userinformation.UserProfile"
+                label="profile"
+                auto-grow
+                placeholder="ご自身のプロフィール入力"
+                outlined
+                rows="10"
+              />
+            </v-card-actions>
+          </v-col>
+        </v-row>
         <v-divider
           class="my-2"
         />
@@ -81,6 +104,7 @@
 
 <script>
 export default {
+  middleware: ['get-user-current'],
   data () {
     const max = 30
     return {
@@ -96,53 +120,44 @@ export default {
       ]
     }
   },
-  async mounted () {
-    await this.$axios.get('/api/v1/users')
-      .then(response => this.setCurrentUserProfile(response))
+  computed: {
+    userinformation () {
+      const id = this.$store.state.user.information.data.id
+      const name = this.$store.state.user.information.data.name
+      const email = this.$store.state.user.information.data.email
+      const UserProfile = this.$store.state.user.information.data.user_profile
+      return { id, name, email, UserProfile }
+    }
   },
   methods: {
-    setCurrentUserProfile (response) {
-      console.log('確認したい')
-      console.log(response.data)
-      this.params.user.name = response.data.name
-      this.params.user.email = response.data.email
-      this.params.user.password = response.data.password
-      this.params.user.id = response.data.id
-      this.params.user.user_profile = response.data.user_profile
-      // TODO削除
-      console.log(this.params.user.name)
-      console.log(this.params.user.email)
-      console.log(this.params.user.id)
-      console.log(this.params.user.user_profile)
-    },
     async UserNameEdit () {
-      this.loading = true
-      await this.$axios.$put('/api/v1/users', this.params)
-        .then(response => this.nameEditComplete(response))
-        .catch(error => this.nameEditError(error))
-      this.loading = false
+      const sure = confirm('ユーザー名を変更します。よろしいですか?')
+      if (sure) {
+        this.loading = true
+        await this.$axios.$put('/api/v1/users', this.userinformation)
+          .then(response => this.nameEditComplete(response))
+          .catch(error => this.nameEditError(error))
+        this.loading = false
+      }
     },
     nameEditComplete (response) {
-      // TODO削除
-      // console.log(response)
-      // console.log(response.name)
-      // const userName = response.name
-      // TODO削除。時間があればトースト設置
-      alert('ユーザー名の更新が完了しました')
-      location.reload('ユーザー名の更新が完了しました')
       // this.store.dispatch('getCurrentUser', userName)
       // const msg = 'すでに会員登録されております'
       // const color = 'error'
       // this.$store.dispatch('getToast', { msg, color })
+      alert('ユーザー名の更新が完了しました')
+      // location.reload('ユーザー名の更新が完了しました')
     },
     nameEditError (error) {
       console.log(error)
     },
     async UserProfileEdit () {
-      console.log('ここではprofileちゃんと送れている')
-      console.log(this.params.user.user_profile)
-      console.log('UserProfileEdit発火')
-      console.log(this.params)
+      this.params.user.id = this.userinformation.id
+      this.params.user.name = this.userinformation.name
+      this.params.user.email = this.userinformation.email
+      this.params.user.user_profile = this.userinformation.UserProfile
+      // TODO削除
+      // キャメルケースでparams渡すとuser_profileの更新がうまくいかないので
       this.loading = true
       await this.$axios.$put('/api/v1/users', this.params)
         .then(response => this.profileEditComplete(response))
@@ -156,7 +171,7 @@ export default {
       // console.log(response.user_profile)
       // TODO削除。時間があればトースト設置
       alert('プロフィールの更新が完了しました')
-      location.reload('ユーザー名の更新が完了しました')
+      // location.reload('ユーザー名の更新が完了しました')
     },
     profileEditError (error) {
       console.log(error)

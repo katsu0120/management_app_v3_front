@@ -21,22 +21,33 @@
           </v-icon>
           メールアドレス
         </v-card-subtitle>
-        <v-card-actions class="mr-15 py-0">
-          <v-text-field
-            v-model="params.user.email"
-            label="email"
-            :rules="emailRules"
-            placeholder="メールアドレス"
-          />
-          <v-btn
-            color="primary"
-            class="mr-15 ml-5 mb-4"
-            :loading="loading"
-            @click="UserMailEdit"
+        <v-row>
+          <v-col
+            cols="12"
+            xs="12"
+            sm="10"
+            md="10"
+            lg="10"
+            xl="10"
           >
-            更新
-          </v-btn>
-        </v-card-actions>
+            <v-card-actions>
+              <v-text-field
+                v-model="userinformation.email"
+                label="email"
+                :rules="emailRules"
+                placeholder="メールアドレス"
+              />
+              <v-btn
+                color="primary"
+                class="ml-2 mb-4"
+                :loading="loading"
+                @click="UserMailEdit"
+              >
+                更新
+              </v-btn>
+            </v-card-actions>
+          </v-col>
+        </v-row>
       </v-card-text>
 
       <v-divider
@@ -50,21 +61,30 @@
             </v-icon>
             パスワード
           </v-card-subtitle>
-          <v-card-actions class="mr-15 py-0">
-            <user-form-password
-              v-model="params.user.password"
-              :password.sync="params.user.password"
-              set-validation
-            />
-            <v-btn
-              color="primary"
-              class="mr-15 ml-5 mb-4"
-              :loading="loading"
-              @click="UserPasswordEdit"
+          <v-row>
+            <v-col
+              cols="12"
+              xs="12"
+              sm="10"
+              md="10"
+              lg="10"
+              xl="10"
             >
-              更新
-            </v-btn>
-          </v-card-actions>
+              <v-card-actions>
+                <user-form-password
+                  set-validation
+                />
+                <v-btn
+                  color="primary"
+                  class="ml-2 mb-4"
+                  :loading="loading"
+                  @click="UserPasswordEdit"
+                >
+                  更新
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-form>
 
@@ -77,12 +97,13 @@
 
 <script>
 export default {
+  middleware: ['get-user-current'],
   data () {
     return {
       show: false,
       isValid: false,
       loading: false,
-      params: { user: { id: '', name: '', email: '', password: '', user_profile: '' } },
+      // params: { user: { id: '', name: '', email: '', user_profile: '' } },
       emailRules: [
         // 入力必須
         v => !!v || '',
@@ -91,26 +112,28 @@ export default {
       ]
     }
   },
-  async mounted () {
-    await this.$axios.get('/api/v1/users')
-      .then(response => this.setCurrentUserSettings(response))
+  computed: {
+    userinformation () {
+      const id = this.$store.state.user.information.data.id
+      const name = this.$store.state.user.information.data.name
+      const email = this.$store.state.user.information.data.email
+      const UserProfile = this.$store.state.user.information.data.user_profile
+      return { id, name, email, UserProfile }
+    }
   },
   methods: {
-    setCurrentUserSettings (response) {
-      console.log('確認したい')
-      console.log(response.data)
-      this.params.user.name = response.data.name
-      this.params.user.email = response.data.email
-      this.params.user.password = response.data.password
-      this.params.user.id = response.data.id
-      this.params.user.user_profile = response.data.user_profile
-    },
     async UserMailEdit () {
-      this.loading = true
-      await this.$axios.$put('/api/v1/users', this.params)
-        .then(response => this.emailEditComplete(response))
-        .catch(error => this.emailEditError(error))
-      this.loading = false
+      const sure = confirm('emailを変更します。よろしいですか')
+      if (sure) {
+        // this.params.user.email = this.userinformation.email
+        // console.log('下が発火')
+        // console.log(this.params.user.email)
+        this.loading = true
+        await this.$axios.$put('/api/v1/users', this.userinformation)
+          .then(response => this.emailEditComplete(response))
+          .catch(error => this.emailEditError(error))
+        this.loading = false
+      }
     },
     emailEditComplete (response) {
       // TODO削除

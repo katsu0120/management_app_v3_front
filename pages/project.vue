@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    {{ $store.state.project.current }}
+    <!-- {{ $store.state.project.current }} -->
     <nuxt-child />
   </v-container>
 </template>

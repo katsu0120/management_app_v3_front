@@ -21,10 +21,12 @@ export const state = () => ({
   },
   project: {
     current: null,
-    list: []
+    list: [],
+    task: []
   },
   user: {
-    current: null
+    current: null,
+    information: []
   },
   auth: {
     token: null,
@@ -50,6 +52,9 @@ export const mutations = {
   setCurrentUser (state, payload) {
     state.user.current = payload
   },
+  setCurrentUserInformation (state, payload) {
+    state.user.information = payload
+  },
   setAuthToken (state, payload) {
     state.auth.token = payload
   },
@@ -64,6 +69,9 @@ export const mutations = {
   },
   setRememberPath (state, payload) {
     state.loggedIn.rememberPath = payload
+  },
+  setTasks (state, payload) {
+    state.project.task = payload
   }
 }
 
@@ -83,6 +91,9 @@ export const actions = {
   },
   getCurrentUser ({ commit }, user) {
     commit('setCurrentUser', user)
+  },
+  getCurrentUserInformation ({ commit }, user) {
+    commit('setCurrentUserInformation', user)
   },
   getAuthToken ({ commit }, token) {
     commit('setAuthToken', token)
@@ -108,5 +119,9 @@ export const actions = {
     }
     params = params || {}
     commit('setRememberPath', { name, params })
+  },
+  getTasks ({ commit }, tasks) {
+    tasks = tasks || []
+    commit('setTasks', tasks)
   }
 }
