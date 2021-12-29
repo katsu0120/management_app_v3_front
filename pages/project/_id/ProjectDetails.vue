@@ -3,7 +3,7 @@
     <v-card
       :loading="loading"
       class="mx-auto my-12"
-      max-width="900"
+      max-width="1000"
     >
       <v-card-title class="py-4 pb-1">
         <v-row>
@@ -90,7 +90,7 @@
             <v-data-table
               :headers="tableHeaders"
               :items="incompleteTasks"
-              :items-per-page="5"
+              :items-per-page="10"
               item-key="id"
             >
               <template #[`item.id`]="{ item }">
@@ -265,11 +265,11 @@ export default {
       editTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
       completeTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true } },
       tableHeaders: [
-        { text: 'ID', width: 50, value: 'id', sortable: false },
-        { text: 'Task名', value: 'title', sortable: false },
-        { text: '内容', value: 'content', sortable: false },
-        { text: '作成日', width: 150, value: 'created_at', sortable: false },
-        { text: '更新日', width: 150, value: 'updated_at', sortable: false },
+        { text: 'ID', width: 30, value: 'id', sortable: false },
+        { text: 'Task名', width: 120, value: 'title', sortable: false },
+        { text: '内容', width: 250, value: 'content', sortable: false },
+        { text: '作成日', width: 100, value: 'created_at', sortable: false },
+        { text: '更新日', width: 100, value: 'updated_at', sortable: false },
         { text: 'Actions', width: 50, class: 'px-1', value: 'actions', sortable: false }
       ]
     }

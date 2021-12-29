@@ -41,7 +41,7 @@ export default {
       isValid: false,
       loading: false,
       // TODO削除
-      params: { user: { name: 'user10', email: 'user10@example.com', password: 'password' } }
+      params: { user: { name: '', email: '', password: '' } }
     }
   },
   methods: {
