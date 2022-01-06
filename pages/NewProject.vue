@@ -26,6 +26,7 @@
                 v-model="params.project.title"
                 label="NewProjectTitle"
                 placeholder="新規プロジェクトのタイトル"
+                autofocus
                 max-width="100"
                 class="my-0 text-h6"
               />
@@ -54,6 +55,7 @@
                 v-model="params.project.content"
                 label="content"
                 placeholder="プロジェクト詳細"
+                autofocus
                 outlined
                 rows="10"
               />

@@ -348,11 +348,11 @@ export default {
   },
   methods: {
     async editProject () {
-      this.loading = true
+      // this.loading = true
       await this.$axios.$put('/api/v1/projects', this.CurrentProject)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
-      this.loading = false
+      // this.loading = false
     },
     async successUpdate (response) {
       await this.$axios.$get('/api/v1/projects')
