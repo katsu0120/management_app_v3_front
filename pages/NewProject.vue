@@ -4,7 +4,14 @@
       class="mx-auto my-12"
       max-width="900"
     >
-      <v-card-title class="py-4 pb-1">
+      <!-- <v-img
+        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+        height="200px"
+      /> -->
+      <v-card-title class="ml-2 pb-0 pt-4">
+        新規プロジェクトの作成
+      </v-card-title>
+      <v-card-title class="py-0 my-0">
         <v-row>
           <v-col
             cols="12"
@@ -20,15 +27,14 @@
                 label="NewProjectTitle"
                 placeholder="新規プロジェクトのタイトル"
                 max-width="100"
-                class="mb-0 text-h6"
-                height="30"
+                class="my-0 text-h6"
               />
             </v-card-actions>
           </v-col>
         </v-row>
       </v-card-title>
       <v-divider
-        class="mx-6"
+        class="mx-2 my-0"
       />
       <v-card-text>
         <v-card-subtitle class=" mb-0 pr-1 py-1">
@@ -88,28 +94,17 @@ export default {
   },
   methods: {
     async create () {
-      // TODO削除
-      console.log('create発火')
-      console.log(this.params.project.title)
-      console.log(this.params.project.content)
       this.loading = true
       await this.$axios.$post('/api/v1/projects', this.params)
         .then(response => this.success(response))
         .catch(error => this.createFailure(error))
       this.loading = false
-      // this.params.project.title = ''
-      // this.params.project.content = ''
     },
     success (response) {
-      console.log(response.id)
       const copyProjects = Array.from(this.$store.state.project.list)
-      console.log(copyProjects)
       copyProjects.push(response)
-      // TODO削除
-      console.log(copyProjects)
       this.$store.dispatch('getProjectList', copyProjects)
 
-      // ステイ
       const projectId = response.id
       this.$router.push({ path: `/project/${projectId}/ProjectDetails` })
       alert('新規作成されました')

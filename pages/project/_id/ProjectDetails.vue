@@ -2,9 +2,21 @@
   <v-container>
     <v-card
       :loading="loading"
-      class="mx-auto my-12"
-      max-width="1000"
+      class="mx-auto mt-4 mb-4"
+      max-width="1050"
     >
+      <v-row
+        justify="end"
+        class="mr-2 pt-2"
+      >
+        <v-btn
+          color="success"
+          dark
+          @click="projectCompleteDialogOpen"
+        >
+          project完了
+        </v-btn>
+      </v-row>
       <v-card-title class="py-4 pb-1">
         <v-row>
           <v-col
@@ -80,7 +92,7 @@
                   dark
                   @click="dialog = true"
                 >
-                  追加
+                  Task追加
                 </v-btn>
               </v-row>
             </v-card-title>
@@ -109,13 +121,13 @@
                 <v-icon
                   small
                   class="mr-2"
-                  @click="editDialogOpen(item)"
+                  @click="taskEditDialogOpen(item)"
                 >
                   mdi-pencil
                 </v-icon>
                 <v-icon
                   small
-                  @click="completeDialogOpen(item)"
+                  @click="taskCompleteDialogOpen(item)"
                 >
                   mdi-check
                 </v-icon>
@@ -176,7 +188,7 @@
     <!-------------------------------------------------------------->
     <!--Taskの編集のdialog-->
     <v-dialog
-      v-model="editDialog"
+      v-model="taskEditDialog"
       max-width="600px"
     >
       <v-card>
@@ -186,11 +198,11 @@
         <v-card-text>
           <v-container fluid>
             <v-text-field
-              v-model="editTaskParams.task.title"
+              v-model="taskEditParams.task.title"
               label="titleの編集"
             />
             <v-textarea
-              v-model="editTaskParams.task.content"
+              v-model="taskEditParams.task.content"
               name="input-7-1"
               label="contentの編集"
               auto-grow
@@ -203,7 +215,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="editDialog = false"
+            @click="taskEditDialog = false"
           >
             Close
           </v-btn>
@@ -220,7 +232,7 @@
     </v-dialog>
     <!-- Taskの完了のdialog------------------------------------------>
     <v-dialog
-      v-model="completeDialog"
+      v-model="taskCompleteDialog"
       max-width="500px"
     >
       <v-card>
@@ -232,14 +244,43 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="completeDialog = false"
+            @click="taskCompleteDialog = false"
           >
             Cancel
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="completeTask"
+            @click="taskComplete"
+          >
+            OK
+          </v-btn>
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- project完了のdialog ------------------------------------------------->
+    <v-dialog
+      v-model="projectCompleteDialog"
+      max-width="500px"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          プロジェクトを完了しますか？
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="projectCompleteDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="projectComplete"
           >
             OK
           </v-btn>
@@ -258,19 +299,22 @@ export default {
     return {
       loading: false,
       dialog: false,
-      editDialog: false,
-      completeDialog: false,
+      taskEditDialog: false,
+      taskCompleteDialog: false,
+      projectCompleteDialog: false,
+      // params一覧---------------------------------------------------------
       params: { project: { id: '' }, task: { title: '', content: '' } },
-      editProjectParams: { id: '', title: '', content: '', updated_at: '' },
-      editTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
-      completeTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true } },
+      projectEditParams: { id: '', title: '', content: '', updated_at: '' },
+      projectCompleteParams: { id: '', title: '', content: '', completed: true },
+      taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
+      taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
         { text: '作成日', width: 100, value: 'created_at', sortable: false },
         { text: '更新日', width: 100, value: 'updated_at', sortable: false },
-        { text: 'Actions', width: 50, class: 'px-1', value: 'actions', sortable: false }
+        { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
       ]
     }
   },
@@ -317,7 +361,6 @@ export default {
     },
     async createTask () {
       this.params.project.id = this.CurrentProject.id
-      // TODO削除
       this.loading = true
       await this.$axios.$post('/api/v1/tasks', this.params)
         .then(response => this.setState(response))
@@ -336,32 +379,33 @@ export default {
     createFailure (error) {
       console.log(error)
     },
+    // プロジェクトをupdateした際にupdate_atを更新するメソッド
     async projectUpdatedAt () {
-      this.editProjectParams.id = this.CurrentProject.id
-      this.editProjectParams.title = this.CurrentProject.title
-      this.editProjectParams.content = this.CurrentProject.content
-      this.editProjectParams.updated_at = new Date()
-      await this.$axios.$put('/api/v1/projects', this.editProjectParams)
+      this.projectEditParams.id = this.CurrentProject.id
+      this.projectEditParams.title = this.CurrentProject.title
+      this.projectEditParams.content = this.CurrentProject.content
+      this.projectEditParams.updated_at = new Date()
+      await this.$axios.$put('/api/v1/projects', this.projectEditParams)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
     },
-    editDialogOpen (item) {
-      this.editTaskParams.project.id = this.CurrentProject.id
-      this.editTaskParams.task.id = item.id
-      this.editTaskParams.task.title = item.title
-      this.editTaskParams.task.content = item.content
-      this.editDialog = true
+    taskEditDialogOpen (item) {
+      this.taskEditParams.project.id = this.CurrentProject.id
+      this.taskEditParams.task.id = item.id
+      this.taskEditParams.task.title = item.title
+      this.taskEditParams.task.content = item.content
+      this.taskEditDialog = true
     },
     async editTask () {
       this.loading = true
-      await this.$axios.$put('/api/v1/tasks', this.editTaskParams)
+      await this.$axios.$put('/api/v1/tasks', this.taskEditParams)
         .then(response => this.editComplete(response))
         .catch(error => this.editFailure(error))
       this.loading = false
-      this.editDialog = false
+      this.taskEditDialog = false
     },
     editComplete (response) {
-      const ChangeBeforeTask = this.editTaskParams.task.id
+      const ChangeBeforeTask = this.taskEditParams.task.id
       const copyTasks = Array.from(this.$store.state.project.task)
       const taskList = []
       copyTasks.forEach((tasks) => {
@@ -376,23 +420,23 @@ export default {
     editFailure (error) {
       console.log(error)
     },
-    completeDialogOpen (item) {
-      this.completeTaskParams.project.id = this.CurrentProject.id
-      this.completeTaskParams.task.id = item.id
-      this.completeTaskParams.task.title = item.title
-      this.completeTaskParams.task.content = item.content
-      this.completeDialog = true
+    taskCompleteDialogOpen (item) {
+      this.taskCompleteParams.project.id = this.CurrentProject.id
+      this.taskCompleteParams.task.id = item.id
+      this.taskCompleteParams.task.title = item.title
+      this.taskCompleteParams.task.content = item.content
+      this.taskCompleteDialog = true
     },
-    async completeTask () {
+    async taskComplete () {
       this.loading = true
-      await this.$axios.$put('/api/v1/tasks', this.completeTaskParams)
-        .then(response => this.succecCompleteTask(response))
+      await this.$axios.$put('/api/v1/tasks', this.taskCompleteParams)
+        .then(response => this.successCompleteTask(response))
         .catch(error => this.taskFailure(error))
       this.loading = false
-      this.completeDialog = false
+      this.taskCompleteDialog = false
     },
-    succecCompleteTask (response) {
-      const ChangeBeforeTask = this.completeTaskParams.task.id
+    successCompleteTask (response) {
+      const ChangeBeforeTask = this.taskCompleteParams.task.id
       const copyTasks = Array.from(this.$store.state.project.task)
       const taskList = []
       copyTasks.forEach((tasks) => {
@@ -404,6 +448,38 @@ export default {
       this.projectUpdatedAt()
     },
     taskFailure (error) {
+      console.log(error)
+    },
+    projectCompleteDialogOpen () {
+      this.projectCompleteParams.id = this.CurrentProject.id
+      this.projectCompleteParams.title = this.CurrentProject.title
+      this.projectCompleteParams.content = this.CurrentProject.content
+      this.projectCompleteDialog = true
+    },
+    projectComplete () {
+      console.log('projectComplete')
+      this.loading = true
+      this.$axios.$put('/api/v1/projects', this.projectCompleteParams)
+        .then(response => this.successProjectComplete(response))
+        .catch(error => this.failureProjectComplete(error))
+      this.loading = false
+      this.projectCompleteDialog = false
+    },
+    successProjectComplete (response) {
+      console.log(response)
+      alert('プロジェクトを完了しました')
+      const copyProjects = Array.from(this.$store.state.project.list)
+      const projectList = []
+      copyProjects.forEach((projects) => {
+        if (this.projectCompleteParams.id !== projects.id) {
+          projectList.push(projects)
+        }
+      })
+      this.$store.dispatch('getProjectList', projectList)
+      this.projectUpdatedAt()
+      this.$router.push('/projects')
+    },
+    failureProjectComplete (error) {
       console.log(error)
     }
   }

@@ -25,6 +25,11 @@ class MyInject {
     return { name, params: { id } }
   }
 
+  // 完了したプロジェクトリンク
+  completedProjectLinkTo (id, name = 'CompletedProject-id-CompletedProjectDetails') {
+    return { name, params: { id } }
+  }
+
   // apiエラーハンドエラー
   apiErrorHandler (response) {
     // ネットワークエラーの場合はresponseが存在しないので500を代入

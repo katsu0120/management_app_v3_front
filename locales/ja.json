@@ -24,6 +24,13 @@
     "project": {
       "id": {
         "ProjectDetails": "プロジェクト詳細",
+        "CompletedTasks": "完了タスク一覧",
+        "CompletedProjectDetails": "完了プロジェクト詳細"
+      }
+    },
+    "CompletedProject": {
+      "id": {
+        "CompletedProjectDetails": "完了プロジェクト詳細",
         "CompletedTasks": "完了タスク一覧"
       }
     }

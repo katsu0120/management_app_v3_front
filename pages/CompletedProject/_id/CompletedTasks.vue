@@ -17,15 +17,6 @@
           >
             <v-card-title>
               完了したタスク
-              <!-- <v-row justify="end">
-                <v-btn
-                  color="primary"
-                  dark
-                  @click="dialog = true"
-                >
-                  追加
-                </v-btn>
-              </v-row> -->
             </v-card-title>
 
             <v-divider class="mb-4" />
@@ -47,21 +38,6 @@
               </template>
               <template #[`item.updated_at`]="{ item }">
                 {{ $my.dateFormat(item.updated_at) }}
-              </template>
-              <template #[`item.actions`]="{ item }">
-                <v-icon
-                  small
-                  @click="undoTaskDialogOpen(item)"
-                >
-                  mdi-arrow-u-left-top-bold
-                </v-icon>
-                <v-icon
-                  small
-                  class="mr-2"
-                  @click="deleteDialogOpen(item)"
-                >
-                  mdi-delete
-                </v-icon>
               </template>
               <template #no-data>
                 <h3>タスクがありません</h3>
@@ -153,8 +129,7 @@ export default {
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
         { text: '作成日', width: 100, value: 'created_at', sortable: false },
-        { text: '更新日', width: 100, value: 'updated_at', sortable: false },
-        { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
+        { text: '更新日', width: 100, value: 'updated_at', sortable: false }
       ]
     }
   },

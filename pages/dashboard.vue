@@ -47,7 +47,7 @@
                     block
                     :height="card.height"
                     :elevation="card.elevation"
-                    :to="$my.projectLinkTo(project.id)"
+                    :to="$my.completedProjectLinkTo(project.id)"
                     class="v-btn text-capitalize"
                   >
                     <v-card-title
@@ -98,7 +98,7 @@
             </template>
             <template #[`item.title`]="{ item }">
               <nuxt-link
-                :to="$my.projectLinkTo(item.id)"
+                :to="$my.completedProjectLinkTo(item.id)"
                 class="text-decoration-none"
               >
                 {{ item.title }}
