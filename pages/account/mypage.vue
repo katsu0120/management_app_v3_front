@@ -76,9 +76,9 @@
                 v-model="userinformation.UserProfile"
                 label="profile"
                 auto-grow
+                autofocus
                 placeholder="ご自身のプロフィール入力"
                 outlined
-                autofocus
                 rows="10"
               />
             </v-card-actions>
