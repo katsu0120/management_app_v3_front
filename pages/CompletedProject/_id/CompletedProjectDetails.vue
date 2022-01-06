@@ -194,17 +194,12 @@ export default {
   data () {
     return {
       loading: false,
-      // dialog: false,
-      // taskEditDialog: false,
-      // taskCompleteDialog: false,
       incompleteProjectDialog: false,
       deleteProjectDialog: false,
       // params一覧---------------------------------------------------------
-      // params: { project: { id: '' }, task: { title: '', content: '' } },
       deleteProjectParams: { id: '', title: '', content: '', updated_at: '' },
+      editProjectParams: { id: '', title: '', content: '', updated_at: '' },
       incompleteProjectParams: { id: '', title: '', content: '', completed: false },
-      // taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
-      // taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
@@ -244,97 +239,23 @@ export default {
     notEditProject () {
       console.log('readOnly')
     },
-    // async createTask () {
-    //   this.params.project.id = this.CurrentProject.id
-    //   this.loading = true
-    //   await this.$axios.$post('/api/v1/tasks', this.params)
-    //     .then(response => this.setState(response))
-    //     .catch(error => this.createFailure(error))
-    //   this.loading = false
-    //   this.dialog = false
-    //   this.params.task.title = ''
-    //   this.params.task.content = ''
-    // },
-    // setState (response) {
-    //   const copyTasks = Array.from(this.$store.state.project.task)
-    //   copyTasks.push(response)
-    //   this.$store.dispatch('getTasks', copyTasks)
-    //   this.projectUpdatedAt()
-    // },
-    // createFailure (error) {
-    //   console.log(error)
-    // },
-    // // プロジェクトをupdateした際にupdate_atを更新するメソッド
-    // async projectUpdatedAt () {
-    //   this.projectEditParams.id = this.CurrentProject.id
-    //   this.projectEditParams.title = this.CurrentProject.title
-    //   this.projectEditParams.content = this.CurrentProject.content
-    //   this.projectEditParams.updated_at = new Date()
-    //   await this.$axios.$put('/api/v1/projects', this.projectEditParams)
-    //     .then(response => this.successUpdate(response))
-    //     .catch(error => this.failureUpdate(error))
-    // },
-    // taskEditDialogOpen (item) {
-    //   this.taskEditParams.project.id = this.CurrentProject.id
-    //   this.taskEditParams.task.id = item.id
-    //   this.taskEditParams.task.title = item.title
-    //   this.taskEditParams.task.content = item.content
-    //   this.taskEditDialog = true
-    // },
-    // async editTask () {
-    //   this.loading = true
-    //   await this.$axios.$put('/api/v1/tasks', this.taskEditParams)
-    //     .then(response => this.editComplete(response))
-    //     .catch(error => this.editFailure(error))
-    //   this.loading = false
-    //   this.taskEditDialog = false
-    // },
-    // editComplete (response) {
-    //   const ChangeBeforeTask = this.taskEditParams.task.id
-    //   const copyTasks = Array.from(this.$store.state.project.task)
-    //   const taskList = []
-    //   copyTasks.forEach((tasks) => {
-    //     if (ChangeBeforeTask !== tasks.id) {
-    //       taskList.push(tasks)
-    //     }
-    //   })
-    //   taskList.push(response)
-    //   this.$store.dispatch('getTasks', taskList)
-    //   this.projectUpdatedAt()
-    // },
-    // editFailure (error) {
-    //   console.log(error)
-    // },
-    // taskCompleteDialogOpen (item) {
-    //   this.taskCompleteParams.project.id = this.CurrentProject.id
-    //   this.taskCompleteParams.task.id = item.id
-    //   this.taskCompleteParams.task.title = item.title
-    //   this.taskCompleteParams.task.content = item.content
-    //   this.taskCompleteDialog = true
-    // },
-    // async taskComplete () {
-    //   this.loading = true
-    //   await this.$axios.$put('/api/v1/tasks', this.taskCompleteParams)
-    //     .then(response => this.successCompleteTask(response))
-    //     .catch(error => this.taskFailure(error))
-    //   this.loading = false
-    //   this.taskCompleteDialog = false
-    // },
-    // successCompleteTask (response) {
-    //   const ChangeBeforeTask = this.taskCompleteParams.task.id
-    //   const copyTasks = Array.from(this.$store.state.project.task)
-    //   const taskList = []
-    //   copyTasks.forEach((tasks) => {
-    //     if (ChangeBeforeTask !== tasks.id) {
-    //       taskList.push(tasks)
-    //     }
-    //   })
-    //   this.$store.dispatch('getTasks', taskList)
-    //   this.projectUpdatedAt()
-    // },
-    // taskFailure (error) {
-    //   console.log(error)
-    // },
+    // プロジェクトをupdateした際にupdate_atを更新するメソッド
+    async projectUpdatedAt () {
+      this.editProjectParams.id = this.CurrentProject.id
+      this.editProjectParams.title = this.CurrentProject.title
+      this.editProjectParams.content = this.CurrentProject.content
+      this.editProjectParams.updated_at = new Date()
+      await this.$axios.$put('/api/v1/projects', this.editProjectParams)
+        .then(response => this.successUpdate(response))
+        .catch(error => this.failureUpdate(error))
+    },
+    async successUpdate (response) {
+      await this.$axios.$get('/api/v1/projects')
+        .then(projects => this.$store.dispatch('getProjectList', projects))
+    },
+    failureUpdate (response) {
+      console.log(response)
+    },
     incompleteProjectDialogOpen () {
       this.incompleteProjectParams.id = this.CurrentProject.id
       this.incompleteProjectParams.title = this.CurrentProject.title
@@ -342,7 +263,6 @@ export default {
       this.incompleteProjectDialog = true
     },
     incompleteProject () {
-      console.log('incompleteProject')
       this.loading = true
       this.$axios.$put('/api/v1/projects', this.incompleteProjectParams)
         .then(response => this.successIncompleteProject(response))
@@ -351,7 +271,6 @@ export default {
       this.incompleteProjectDialog = false
     },
     successIncompleteProject (response) {
-      console.log(response)
       alert('プロジェクトを未完了に戻しました')
       const copyProjects = Array.from(this.$store.state.project.list)
       const projectList = []
@@ -362,7 +281,7 @@ export default {
       })
       this.$store.dispatch('getProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/projects')
+      this.$router.push('/dashboard')
     },
     failureIncompleteProject (error) {
       console.log(error)
@@ -374,8 +293,6 @@ export default {
       this.deleteProjectDialog = true
     },
     async deleteProject () {
-      console.log('deleteProject')
-      console.log(this.deleteProjectParams)
       this.loading = true
       await this.$axios.$delete('/api/v1/projects', { data: this.deleteProjectParams })
         .then(response => this.deleteComplete(response))
@@ -384,8 +301,6 @@ export default {
       this.deleteProjectDialog = false
     },
     deleteComplete (response) {
-      console.log('下記がdeleteCompleteのresponse')
-      console.log(response)
       alert('プロジェクトを削除いたしました')
       const copyProjects = Array.from(this.$store.state.project.list)
       const projectList = []
