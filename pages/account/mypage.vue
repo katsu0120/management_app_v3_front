@@ -36,6 +36,7 @@
                 label="name"
                 :rules="nameRules"
                 :counter="max"
+                autofocus
                 placeholder="あなたの表示名"
               />
               <v-btn
@@ -77,6 +78,7 @@
                 auto-grow
                 placeholder="ご自身のプロフィール入力"
                 outlined
+                autofocus
                 rows="10"
               />
             </v-card-actions>

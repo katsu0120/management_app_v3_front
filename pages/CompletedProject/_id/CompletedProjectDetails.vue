@@ -3,7 +3,7 @@
     <v-card
       :loading="loading"
       class="mx-auto mt-4 mb-4"
-      max-width="1050"
+      max-width="1000"
     >
       <v-row
         justify="end"

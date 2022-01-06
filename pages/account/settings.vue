@@ -36,6 +36,7 @@
                 label="email"
                 :rules="emailRules"
                 placeholder="メールアドレス"
+                autofocus
               />
               <v-btn
                 color="primary"
