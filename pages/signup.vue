@@ -40,7 +40,7 @@ export default {
     return {
       isValid: false,
       loading: false,
-      params: { user: { name: '', email: '', password: '' } }
+      params: { user: { name: 'test', email: 'gragrand5858@gmail.com', password: 'password' } }
     }
   },
   methods: {
@@ -54,17 +54,15 @@ export default {
       this.loading = false
     },
     Successful (response) {
+      console.log(response)
       alert('ご登録のメールアドレスに認証メールをご送付させていただきました')
-      this.$router.push('/')
+      // 開発が終わったらリダイレクトはコメントアウト外す
+      // this.$router.push('/')
+      // TODO削除
       // location.reload()
-      // TODO
-      // Toastデザイン。メール認証実装時はhomeにredirectしてtoast出したい。
-      // const msg = '登録できました!!'
-      // const color = 'success'
-      // this.$store.dispatch('getToast', { msg, color })
-      // this.$auth.login(response)
     },
     signUpFailure ({ response }) {
+      console.log(response)
       const msg = 'すでに会員登録されております'
       const color = 'error'
       this.$store.dispatch('getToast', { msg, color })
