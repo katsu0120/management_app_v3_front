@@ -56,6 +56,7 @@ export default {
     Successful (response) {
       console.log(response)
       alert('ご登録のメールアドレスに認証メールをご送付させていただきました')
+      // 開発が終わったらリダイレクトはコメントアウト外す
       // this.$router.push('/')
       // TODO削除
       // location.reload()

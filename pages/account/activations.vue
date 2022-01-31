@@ -13,7 +13,7 @@ export default {
     if (this.token) { await this.verifyToken() }
     console.log('この下がcreate')
     console.log(this.token)
-    // ③ トークンがnullの場合、何もせずリダイレクトする
+    // ③ トークンがnullの場合、何もせずリダイレクトしたいが上手くいかない。保留。
     // this.$router.replace('/')
   },
   methods: {
