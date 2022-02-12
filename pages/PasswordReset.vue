@@ -33,7 +33,7 @@ export default {
     return {
       isValid: false,
       loading: false,
-      params: { user: { email: 'gragrand5858@gmail.com' } }
+      params: { user: { email: '' } }
     }
   },
   methods: {
