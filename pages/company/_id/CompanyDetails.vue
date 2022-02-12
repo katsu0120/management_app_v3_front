@@ -4,8 +4,8 @@
   >
     <v-parallax>
       <v-img
-        :src="homeImg"
-        alt="homeImg"
+        :src="companyProjectsImg"
+        alt="companyProjectsImg"
         :aspect-ratio="16/9"
         gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
       >
@@ -24,7 +24,10 @@
               <v-card-title
                 class="white--text"
               >
-                最近のプロジェクト
+                最近の共有プロジェクト
+                カンパニー{{ $store.state.company.current }}
+                {{ $route.fullPath }}
+                urlを表示させる{{ URL }}
               </v-card-title>
 
               <v-divider
@@ -65,7 +68,7 @@
                 </v-col>
                 <!-- 最近のプロジェクト -->
                 <v-col
-                  v-for="(project, i) in incompleteProjects.slice(0, 2)"
+                  v-for="(project, i) in recentProjects.slice(0, 2)"
                   :key="`card-project-${i}`"
                   cols="12"
                   :sm="card.sm"
@@ -75,7 +78,7 @@
                     block
                     :height="card.height"
                     :elevation="card.elevation"
-                    :to="$my.projectLinkTo(project.id)"
+                    :to="{ name: 'company-id-project-projectId-CompanyProjectDetails', params: { id: currentCompany, projectId: project.id } }"
                     class="v-btn text-capitalize"
                   >
                     <v-card-title
@@ -117,7 +120,7 @@
 
           <v-data-table
             :headers="tableHeaders"
-            :items="incompleteProjects"
+            :items="recentProjects"
             item-key="id"
           >
             <template #[`item.id`]="{ item }">
@@ -125,7 +128,7 @@
             </template>
             <template #[`item.title`]="{ item }">
               <nuxt-link
-                :to="$my.projectLinkTo(item.id)"
+                :to="{ name: 'company-id-project-projectId-CompanyProjectDetails', params: { id: currentCompany, projectId: item.id } }"
                 class="text-decoration-none"
               >
                 {{ item.title }}
@@ -148,14 +151,13 @@
 </template>
 
 <script>
-import homeImg from '~/assets/images/logged-in/home.png'
+import companyProjectsImg from '~/assets/images/logged-in/Conference presentation _Monochromatic.png'
 export default {
   name: 'PagesProjects',
-  layout: 'logged-in',
-  middleware: ['get-project-list'],
+  layout: 'company',
   data () {
     return {
-      homeImg,
+      companyProjectsImg,
       container: {
         sm: 10,
         md: 8
@@ -176,24 +178,21 @@ export default {
     }
   },
   computed: {
+    currentCompany () {
+      const companyId = this.$store.state.company.current.id
+      return companyId
+    },
+    URL () {
+      const url = `company/${this.currentCompany}/project//CompanyProjectDetails`
+      return url
+    },
     recentProjects () {
-      const copyProjects = Array.from(this.$store.state.project.list)
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
       return copyProjects.sort((a, b) => {
         if (a.updated_at > b.updated_at) { return -1 }
         if (a.updated_at < b.updated_at) { return 1 }
         return 0
       })
-    },
-    // completed:falseステータスのprojectsを返す
-    incompleteProjects () {
-      const projectList = []
-      this.recentProjects.forEach((project) => {
-        // if (!project.completed && project.company_id == null) {
-        if (!project.completed) {
-          projectList.push(project)
-        }
-      })
-      return projectList
     }
   }
 }

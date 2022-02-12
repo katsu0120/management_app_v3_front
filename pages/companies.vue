@@ -1,11 +1,11 @@
 <template>
   <div
-    id="projects"
+    id="companies"
   >
     <v-parallax>
       <v-img
-        :src="homeImg"
-        alt="homeImg"
+        :src="companyImg"
+        alt="companyImg"
         :aspect-ratio="16/9"
         gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
       >
@@ -24,7 +24,7 @@
               <v-card-title
                 class="white--text"
               >
-                最近のプロジェクト
+                最近選択したカンパニー
               </v-card-title>
 
               <v-divider
@@ -35,7 +35,7 @@
               <v-row
                 align="center"
               >
-                <!-- プロジェクトの追加 -->
+                <!-- カンパニーの追加 -->
                 <v-col
                   cols="12"
                   :sm="card.sm"
@@ -58,15 +58,15 @@
                       <div
                         class="caption myblue--text"
                       >
-                        プロジェクトを追加
+                        カンパニーを追加
                       </div>
                     </div>
                   </v-btn>
                 </v-col>
-                <!-- 最近のプロジェクト -->
+                <!-- 最近のカンパニー -->
                 <v-col
-                  v-for="(project, i) in incompleteProjects.slice(0, 2)"
-                  :key="`card-project-${i}`"
+                  v-for="(company, i) in recentCompanies.slice(0, 2)"
+                  :key="`card-company-${i}`"
                   cols="12"
                   :sm="card.sm"
                   :md="card.md"
@@ -75,13 +75,13 @@
                     block
                     :height="card.height"
                     :elevation="card.elevation"
-                    :to="$my.projectLinkTo(project.id)"
+                    :to="$my.companyLinkTo(company.id)"
                     class="v-btn text-capitalize"
                   >
                     <v-card-title
                       class="pb-1 d-block text-truncate"
                     >
-                      {{ project.title }}
+                      {{ company.name }}
                     </v-card-title>
                     <v-card-text
                       class="caption"
@@ -91,7 +91,7 @@
                       >
                         mdi-update
                       </v-icon>
-                      {{ $my.dateFormat(project.updated_at) }}
+                      {{ $my.dateFormat(company.updated_at) }}
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -110,25 +110,26 @@
           :md="container.md"
         >
           <v-card-title>
-            プロジェクト一覧
+            Company一覧
           </v-card-title>
 
           <v-divider class="mb-4" />
 
           <v-data-table
             :headers="tableHeaders"
-            :items="incompleteProjects"
+            :items="recentCompanies"
+            :items-per-page="5"
             item-key="id"
           >
             <template #[`item.id`]="{ item }">
               {{ item.id }}
             </template>
-            <template #[`item.title`]="{ item }">
+            <template #[`item.name`]="{ item }">
               <nuxt-link
-                :to="$my.projectLinkTo(item.id)"
+                :to="$my.companyLinkTo(item.id)"
                 class="text-decoration-none"
               >
-                {{ item.title }}
+                {{ item.name }}
               </nuxt-link>
             </template>
             <template #[`item.created_at`]="{ item }">
@@ -148,14 +149,13 @@
 </template>
 
 <script>
-import homeImg from '~/assets/images/logged-in/home.png'
+import companyImg from '~/assets/images/logged-in/City buildings_Flatline.png'
 export default {
-  name: 'PagesProjects',
-  layout: 'logged-in',
-  middleware: ['get-project-list'],
+  name: 'PagesAccount',
+  layout: 'company',
   data () {
     return {
-      homeImg,
+      companyImg,
       container: {
         sm: 10,
         md: 8
@@ -168,39 +168,44 @@ export default {
       },
       tableHeaders: [
         { text: 'ID', width: 50, value: 'id', sortable: false },
-        { text: '会社ID', width: 100, value: 'company_id', sortable: false },
-        { text: 'プロジェクト名', value: 'title', sortable: false },
-        { text: '作成日', width: 150, value: 'created_at', sortable: false },
-        { text: '更新日', width: 150, value: 'updated_at', sortable: false }
+        { text: 'カンパニー名', value: 'name', sortable: false },
+        { text: '作成日', width: 100, value: 'created_at', sortable: false },
+        { text: '更新日', width: 100, value: 'updated_at', sortable: false }
       ]
     }
   },
   computed: {
-    recentProjects () {
-      const copyProjects = Array.from(this.$store.state.project.list)
-      return copyProjects.sort((a, b) => {
+    recentCompanies () {
+      const copyCompanies = Array.from(this.$store.state.company.list)
+      return copyCompanies.sort((a, b) => {
         if (a.updated_at > b.updated_at) { return -1 }
         if (a.updated_at < b.updated_at) { return 1 }
         return 0
       })
+    }
+  },
+  methods: {
+    async test () {
+      this.loading = true
+      // // await console.log('test')
+      await this.$axios.$get('/api/v1/companies')
+        .then(response => this.Successful(response))
+        .catch(error => this.Failure(error))
+      this.loading = false
     },
-    // completed:falseステータスのprojectsを返す
-    incompleteProjects () {
-      const projectList = []
-      this.recentProjects.forEach((project) => {
-        // if (!project.completed && project.company_id == null) {
-        if (!project.completed) {
-          projectList.push(project)
-        }
-      })
-      return projectList
+    Successful (response) {
+      console.log('この下がSuccessful')
+      console.log(response)
+    },
+    Failure () {
+      console.log('エラー?')
     }
   }
 }
 </script>
 
 <style lang="scss">
-#projects {
+#companies {
   .v-parallax__content {
     padding: 0;
   }

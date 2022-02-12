@@ -41,7 +41,7 @@ export default {
       isValid: false,
       loading: false,
       // TODO削除
-      params: { user: { name: '', email: '', password: '' } }
+      params: { user: { name: 'test', email: 'gragrand5858@gmail.com', password: 'password' } }
     }
   },
   methods: {
@@ -57,10 +57,7 @@ export default {
     Successful (response) {
       console.log(response)
       alert('ご登録のメールアドレスに認証メールをご送付させていただきました')
-      // 開発が終わったらリダイレクトはコメントアウト外す
-      // this.$router.push('/')
-      // TODO削除
-      // location.reload()
+      this.$router.push('/')
     },
     signUpFailure ({ response }) {
       console.log(response)
