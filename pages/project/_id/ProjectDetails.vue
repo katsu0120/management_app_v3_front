@@ -468,8 +468,6 @@ export default {
       this.projectCompleteDialog = false
     },
     successProjectComplete (response) {
-      // TODO削除
-      console.log(response)
       alert('プロジェクトを完了しました')
       const copyProjects = Array.from(this.$store.state.project.list)
       const projectList = []

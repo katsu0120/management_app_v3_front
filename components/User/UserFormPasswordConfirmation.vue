@@ -38,7 +38,6 @@ export default {
       set (newVal) { return this.$emit('update:password', newVal) }
     },
     form () {
-      // console.log(this.password)
       const min = '8文字以上'
       const msg = `${min}。半角英数字、ﾊｲﾌﾝ、ｱﾝﾀﾞｰﾊﾞｰが使えます`
       // ログインページ=>入力必須=>setValidation=false

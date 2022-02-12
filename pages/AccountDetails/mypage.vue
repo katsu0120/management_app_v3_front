@@ -143,12 +143,7 @@ export default {
       }
     },
     nameEditComplete (response) {
-      // this.store.dispatch('getCurrentUser', userName)
-      // const msg = 'すでに会員登録されております'
-      // const color = 'error'
-      // this.$store.dispatch('getToast', { msg, color })
       alert('ユーザー名の更新が完了しました')
-      // location.reload('ユーザー名の更新が完了しました')
     },
     nameEditError (error) {
       console.log(error)
@@ -158,8 +153,6 @@ export default {
       this.params.user.name = this.userinformation.name
       this.params.user.email = this.userinformation.email
       this.params.user.user_profile = this.userinformation.UserProfile
-      // TODO削除
-      // キャメルケースでparams渡すとuser_profileの更新がうまくいかないので
       this.loading = true
       await this.$axios.$put('/api/v1/users', this.params)
         .then(response => this.profileEditComplete(response))
@@ -167,13 +160,7 @@ export default {
       this.loading = false
     },
     profileEditComplete (response) {
-      // TODO削除
-      // console.log('この下がprofileレスポンス')
-      // console.log(response)
-      // console.log(response.user_profile)
-      // TODO削除。時間があればトースト設置
       alert('プロフィールの更新が完了しました')
-      // location.reload('ユーザー名の更新が完了しました')
     },
     profileEditError (error) {
       console.log(error)

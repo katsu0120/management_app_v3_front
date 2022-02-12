@@ -126,9 +126,6 @@ export default {
     async UserMailEdit () {
       const sure = confirm('emailを変更します。よろしいですか')
       if (sure) {
-        // this.params.user.email = this.userinformation.email
-        // console.log('下が発火')
-        // console.log(this.params.user.email)
         this.loading = true
         await this.$axios.$put('/api/v1/users', this.userinformation)
           .then(response => this.emailEditComplete(response))
@@ -137,17 +134,12 @@ export default {
       }
     },
     emailEditComplete (response) {
-      // TODO削除
       console.log(response)
     },
     emailEditError (error) {
       console.log(error)
     },
     async UserPasswordEdit () {
-      console.log('ここではpasswordちゃんと送れている')
-      console.log(this.params.user.password)
-      console.log('UserPasswordeEdit発火')
-      console.log(this.params)
       this.loading = true
       await this.$axios.$put('/api/v1/users', this.params)
         .then(response => this.profileEditComplete(response))

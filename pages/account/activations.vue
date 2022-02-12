@@ -11,9 +11,6 @@ export default {
   async created () {
     // ② トークンが存在する場合、トークンを検証する
     if (this.token) { await this.verifyToken() }
-    // TODO削除
-    console.log('この下がcreate')
-    console.log(this.token)
     // ③ トークンがnullの場合、何もせずリダイレクト
     this.$router.replace('/')
   },

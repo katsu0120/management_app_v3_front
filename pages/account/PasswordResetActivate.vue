@@ -24,14 +24,10 @@ export default {
     },
     validToken (response) {
       this.$auth.login(response)
-      // TODO削除
-      console.log('この下がvalidTokenのresponse')
-      console.log(response)
       this.$router.push('/account/PasswordResetResetting')
     },
     invalidToken (error) {
       console.log(error)
-      console.log('これエラー')
     }
   }
 }

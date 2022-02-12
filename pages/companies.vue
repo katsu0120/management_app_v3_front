@@ -187,7 +187,6 @@ export default {
   methods: {
     async test () {
       this.loading = true
-      // // await console.log('test')
       await this.$axios.$get('/api/v1/companies')
         .then(response => this.Successful(response))
         .catch(error => this.Failure(error))
@@ -198,7 +197,7 @@ export default {
       console.log(response)
     },
     Failure () {
-      console.log('エラー?')
+      console.log('エラー')
     }
   }
 }
