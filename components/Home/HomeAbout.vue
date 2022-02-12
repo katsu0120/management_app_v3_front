@@ -1,21 +1,5 @@
 <template>
   <div>
-    <v-card-title class="pb-8 text-subtitle-2 justify-center">
-      このアプリケーションの作り方は、下記URLに公開されています。
-    </v-card-title>
-    <v-card-title class="text-subtitle-2 justify-center">
-      「Rails6とNuxt.jsで作るユーザーJWT認証付きシングルページアプリケーション」
-    </v-card-title>
-    <v-card-text class="text-center">
-      <a
-        :href="blogUrl"
-        rel="nofollow"
-        target="_blank"
-        class="text-decoration-none"
-      >
-        {{ blogUrl }}
-      </a>
-    </v-card-text>
     <v-card-title class="text-subtitle-2 justify-center">
       採用している技術
     </v-card-title>
@@ -53,7 +37,6 @@
 export default {
   data () {
     return {
-      blogUrl: 'https://blog.cloud-acct.com/categories/udemy',
       technologies: [
         { name: 'Docker', v: 'v19.03+', use: '開発環境', color: '#2496ED' },
         { name: 'Rails api', v: 'v6.0+', use: 'サーバーサイド', color: '#CC0000' },

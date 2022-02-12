@@ -67,8 +67,8 @@ export default {
       menus: [
         // TODO 削除
         // { name: 'account-settings', icon: 'mdi-account-cog' },
-        { name: 'account-mypage', icon: 'mdi-account' },
-        { name: 'account-settings', icon: 'mdi-cog' },
+        { name: 'AccountDetails-mypage', icon: 'mdi-account' },
+        { name: 'AccountDetails-settings', icon: 'mdi-cog' },
         { name: 'logout', icon: 'mdi-logout-variant', divider: true }
       ]
     }

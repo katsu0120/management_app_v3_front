@@ -8,7 +8,7 @@
     <v-img
       id="scroll-top"
       dark
-      src="https://picsum.photos/id/20/1920/1080?blur=5"
+      src="https://picsum.photos/id/7/1920/1080?blur=5"
       gradient="to top right, rgba(19,84,122,.6), rgba(128,208,199,.9)"
       :height="imgHeight"
     >
@@ -28,7 +28,7 @@
             class="subheading"
             :style="{ letterSpacing: '5px' }"
           >
-            中小企業に特化した事業計画策定ツール
+            使いたいを追求したProject管理ツール
           </h4>
         </v-col>
       </v-row>
@@ -69,8 +69,6 @@
 <script>
 import HomeAbout from '~/components/Home/HomeAbout'
 import HomeProducts from '~/components/Home/HomeProducts'
-import HomePrice from '~/components/Home/HomePrice'
-import HomeContact from '~/components/Home/HomeContact'
 import HomeCompany from '~/components/Home/HomeCompany'
 
 export default {
@@ -78,8 +76,6 @@ export default {
   components: {
     HomeAbout,
     HomeProducts,
-    HomePrice,
-    HomeContact,
     HomeCompany
   },
   middleware: ['logged-in-redirect'],
@@ -87,11 +83,9 @@ export default {
     return {
       imgHeight: 500,
       menus: [
-        { title: 'about', subtitle: 'このサイトはブログ"独学プログラマ"で公開されているチュートリアルのデモアプリケーションです' },
+        { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理サイトです' },
         { title: 'products', subtitle: '他にはない優れた機能の数々' },
-        { title: 'price', subtitle: '会社の成長に合わせた3つのプラン' },
-        { title: 'contact', subtitle: 'お気軽にご連絡を' },
-        { title: 'company', subtitle: '私たちの会社' }
+        { title: 'company', subtitle: '作成者の情報' }
       ]
     }
   }

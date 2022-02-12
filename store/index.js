@@ -19,6 +19,14 @@ export const state = () => ({
       'login'
     ]
   },
+  company: {
+    current: null,
+    list: []
+  },
+  companyProject: {
+    current: null,
+    list: []
+  },
   project: {
     current: null,
     list: [],
@@ -43,12 +51,28 @@ export const state = () => ({
 export const getters = {}
 
 export const mutations = {
+  // Company
+  setCompanyList (state, payload) {
+    state.company.list = payload
+  },
+  setCurrentCompany (state, payload) {
+    state.company.current = payload
+  },
+  // 共有プロジェクト
+  setCompanyProjectList (state, payload) {
+    state.companyProject.list = payload
+  },
+  setCompanyProjectCurrent (state, payload) {
+    state.companyProject.current = payload
+  },
+  // 個人プロジェクト
   setProjestList (state, payload) {
     state.project.list = payload
   },
   setCurrentProject (state, payload) {
     state.project.current = payload
   },
+  // 自分のユーザー
   setCurrentUser (state, payload) {
     state.user.current = payload
   },
@@ -76,6 +100,37 @@ export const mutations = {
 }
 
 export const actions = {
+  // Company
+  getCompanyList ({ commit }, companies) {
+    companies = companies || []
+    commit('setCompanyList', companies)
+  },
+  getCurrentCompany ({ state, commit }, params) {
+    console.log('getCurrentCompany/params', params)
+    let currentCompany = null
+    if (params && params.id) {
+      const id = Number(params.id)
+      currentCompany = state.company.list.find(company => company.id === id) || null
+    }
+    console.log('getCurrentCompany', currentCompany)
+    commit('setCurrentCompany', currentCompany)
+  },
+  // 共有プロジェクト
+  getCompanyProjectList ({ commit }, projects) {
+    projects = projects || []
+    commit('setCompanyProjectList', projects)
+  },
+  // 共有プロジェクトのプロジェクトの選択
+  getCompanyProjectCurrent ({ state, commit }, params) {
+    let companyProjectCurrent = null
+    if (params && params.projectId) {
+      const id = Number(params.projectId)
+      companyProjectCurrent = state.companyProject.list.find(projectCurrent => projectCurrent.id === id) || null
+    }
+
+    commit('setCompanyProjectCurrent', companyProjectCurrent)
+  },
+  // 個人プロジェクト
   getProjectList ({ commit }, projects) {
     projects = projects || []
     commit('setProjestList', projects)

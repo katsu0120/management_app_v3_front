@@ -20,6 +20,11 @@ class MyInject {
     return dateTimeFormat.format(new Date(dateStr))
   }
 
+  // カンパニー毎のリンク
+  companyLinkTo (id, name = 'company-id-CompanyDetails') {
+    return { name, params: { id } }
+  }
+
   // プロジェクトリンク
   projectLinkTo (id, name = 'project-id-ProjectDetails') {
     return { name, params: { id } }

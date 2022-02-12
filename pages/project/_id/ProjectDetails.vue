@@ -104,7 +104,6 @@
             <v-data-table
               :headers="tableHeaders"
               :items="incompleteTasks"
-              :items-per-page="10"
               item-key="id"
             >
               <template #[`item.id`]="{ item }">
@@ -296,7 +295,8 @@
 <script>
 export default {
   name: 'PagesProjectDetails',
-  middleware: ['get-project-task'],
+  middleware: ['authentication', 'get-project-list', 'get-project-current', 'get-project-task'],
+  // middleware: ['get-project-task'],
   data () {
     return {
       loading: false,
@@ -468,6 +468,7 @@ export default {
       this.projectCompleteDialog = false
     },
     successProjectComplete (response) {
+      // TODO削除
       console.log(response)
       alert('プロジェクトを完了しました')
       const copyProjects = Array.from(this.$store.state.project.list)

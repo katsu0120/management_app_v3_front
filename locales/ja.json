@@ -1,10 +1,10 @@
 { 
   "menus": {
-    "about"   : "サイトについて",
+    "about"   : "Mgt_App(マネジメントアップ)ついて",
     "products": "製品",
     "price"   : "価格",
     "contact" : "お問い合わせ",
-    "company" : "会社情報",
+    "company" : "情報",
     "payments": {
       "month" : "月払い",
       "year"  : "年払い"
@@ -16,10 +16,23 @@
     "logout": "ログアウト",
     "NewProject": "新規プロジェクト",
     "dashboard": "ダッシュボード",
-    "account": {
+    "PasswordReset": "パスワードを忘れた",
+    "PasswordResetResetting": "パスワードの変更",
+    "companies": "Company一覧",
+    "AccountDetails": {
       "settings": "設定",
       "password": "パスワード変更",
       "mypage": "マイページ"
+    },
+    "account": {
+      "activations": "アカウント有効化",
+      "PasswordResetActivate": "パスワードリセット有効化",
+      "PasswordResetResetting": "パスワードの再設定"
+    },
+    "company": {
+      "id": {
+        "CompanyDetails": "共有プロジェクト"
+      }
     },
     "project": {
       "id": {

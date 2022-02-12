@@ -11,10 +11,11 @@ export default {
   async created () {
     // ② トークンが存在する場合、トークンを検証する
     if (this.token) { await this.verifyToken() }
+    // TODO削除
     console.log('この下がcreate')
     console.log(this.token)
-    // ③ トークンがnullの場合、何もせずリダイレクトしたいが上手くいかない。保留。
-    // this.$router.replace('/')
+    // ③ トークンがnullの場合、何もせずリダイレクト
+    this.$router.replace('/')
   },
   methods: {
     async verifyToken () {
@@ -25,12 +26,10 @@ export default {
       await this.$axios.$get('/api/v1/account_activations', headers)
         .then(response => this.validToken(response))
       // ⑤トークンが検証エラーを吐いた場合、「もう一度処理を行ってください」などのトースターを出力する
-        .catch(error => this.$my.invalidToken(error))
+        .catch(error => this.invalidToken(error))
     },
     // ⑥ トークンの検証に成功した場合、ログインフラグをtrueとし、ログイン画面を表示する
     validToken (response) {
-      console.log('この下がresponse')
-      console.log(response)
       this.$auth.login(response)
       alert('会員登録が完了しました')
       // ルートリダイレクト
