@@ -40,7 +40,8 @@ export default {
     return {
       isValid: false,
       loading: false,
-      params: { user: { name: '', email: '', password: '' } }
+      // TOCO削除
+      params: { user: { name: 'test', email: 'gragrand5858@gmail.com', password: 'password' } }
     }
   },
   methods: {
@@ -54,13 +55,18 @@ export default {
       this.loading = false
     },
     Successful (response) {
-      console.log(response)
-      alert('ご登録のメールアドレスに認証メールをご送付させていただきました')
-      this.$router.push('/')
+      const msg = response.data.msg
+      const color = response.data.color
+      this.$store.dispatch('getToast', { msg, color })
+      if (color === '#00796B') {
+        setTimeout(() => {
+          this.$router.push('/')
+        }, 2000)
+      }
     },
     signUpFailure ({ response }) {
       console.log(response)
-      const msg = 'すでに会員登録されております'
+      const msg = 'エラーです'
       const color = 'error'
       this.$store.dispatch('getToast', { msg, color })
     }
