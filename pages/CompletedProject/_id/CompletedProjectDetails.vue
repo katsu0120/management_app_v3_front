@@ -281,7 +281,7 @@ export default {
       })
       this.$store.dispatch('getProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/projects')
+      this.$router.push('/CompletedPersonalProjects')
     },
     failureIncompleteProject (error) {
       console.log(error)
@@ -310,7 +310,7 @@ export default {
         }
       })
       this.$store.dispatch('getProjectList', projectList)
-      this.$router.push('/projects')
+      this.$router.push('/CompletedPersonalProjects')
     },
     deleteFailure (error) {
       console.log(error)
