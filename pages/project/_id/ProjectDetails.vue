@@ -29,7 +29,7 @@
           >
             <v-card-actions>
               <v-text-field
-                v-model="CurrentProject.title"
+                v-model="currentProject.title"
                 label="ProjectTitle"
                 placeholder="projectのタイトル"
                 max-width="100"
@@ -62,7 +62,7 @@
               class=" pb-0"
             >
               <v-textarea
-                v-model="CurrentProject.content"
+                v-model="currentProject.content"
                 label="content"
                 auto-grow
                 placeholder="プロジェクト詳細"
@@ -296,7 +296,6 @@
 export default {
   name: 'PagesProjectDetails',
   middleware: ['authentication', 'get-project-list', 'get-project-current', 'get-project-task'],
-  // middleware: ['get-project-task'],
   data () {
     return {
       loading: false,
@@ -321,7 +320,7 @@ export default {
     }
   },
   computed: {
-    CurrentProject () {
+    currentProject () {
       const id = this.$store.state.project.current.id
       const title = this.$store.state.project.current.title
       const content = this.$store.state.project.current.content
@@ -348,11 +347,11 @@ export default {
   },
   methods: {
     async editProject () {
-      // this.loading = true
-      await this.$axios.$put('/api/v1/projects', this.CurrentProject)
+      this.loading = true
+      await this.$axios.$put('/api/v1/projects', this.currentProject)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
-      // this.loading = false
+      this.loading = false
     },
     async successUpdate (response) {
       await this.$axios.$get('/api/v1/projects')
@@ -362,7 +361,7 @@ export default {
       console.log(response)
     },
     async createTask () {
-      this.params.project.id = this.CurrentProject.id
+      this.params.project.id = this.currentProject.id
       this.loading = true
       await this.$axios.$post('/api/v1/tasks', this.params)
         .then(response => this.setState(response))
@@ -383,16 +382,16 @@ export default {
     },
     // プロジェクトをupdateした際にupdate_atを更新するメソッド
     async projectUpdatedAt () {
-      this.projectEditParams.id = this.CurrentProject.id
-      this.projectEditParams.title = this.CurrentProject.title
-      this.projectEditParams.content = this.CurrentProject.content
+      this.projectEditParams.id = this.currentProject.id
+      this.projectEditParams.title = this.currentProject.title
+      this.projectEditParams.content = this.currentProject.content
       this.projectEditParams.updated_at = new Date()
       await this.$axios.$put('/api/v1/projects', this.projectEditParams)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
     },
     taskEditDialogOpen (item) {
-      this.taskEditParams.project.id = this.CurrentProject.id
+      this.taskEditParams.project.id = this.currentProject.id
       this.taskEditParams.task.id = item.id
       this.taskEditParams.task.title = item.title
       this.taskEditParams.task.content = item.content
@@ -423,7 +422,7 @@ export default {
       console.log(error)
     },
     taskCompleteDialogOpen (item) {
-      this.taskCompleteParams.project.id = this.CurrentProject.id
+      this.taskCompleteParams.project.id = this.currentProject.id
       this.taskCompleteParams.task.id = item.id
       this.taskCompleteParams.task.title = item.title
       this.taskCompleteParams.task.content = item.content
@@ -453,9 +452,9 @@ export default {
       console.log(error)
     },
     projectCompleteDialogOpen () {
-      this.projectCompleteParams.id = this.CurrentProject.id
-      this.projectCompleteParams.title = this.CurrentProject.title
-      this.projectCompleteParams.content = this.CurrentProject.content
+      this.projectCompleteParams.id = this.currentProject.id
+      this.projectCompleteParams.title = this.currentProject.title
+      this.projectCompleteParams.content = this.currentProject.content
       this.projectCompleteDialog = true
     },
     projectComplete () {

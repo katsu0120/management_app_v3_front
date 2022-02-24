@@ -63,7 +63,7 @@ export default {
       navMenus: [
         { name: 'CompletedProject-id-CompletedProjectDetails', icon: 'mdi-note-search-outline' },
         { name: 'CompletedProject-id-CompletedTasks', icon: 'mdi-calendar-check' },
-        { name: 'dashboard', icon: 'mdi-view-dashboard' }
+        { name: 'CompletedPersonalProjects', icon: 'mdi-checkbox-marked' }
       ]
     }
   },

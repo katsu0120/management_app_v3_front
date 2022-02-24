@@ -1,4 +1,4 @@
-const homePath = 'projects'
+const homePath = 'companies'
 
 export const state = () => ({
   styles: {
@@ -23,9 +23,15 @@ export const state = () => ({
     current: null,
     list: []
   },
+  // カンパニー参加usersと作成user
+  companyUsers: {
+    ownerUser: null,
+    list: []
+  },
   companyProject: {
     current: null,
-    list: []
+    list: [],
+    task: []
   },
   project: {
     current: null,
@@ -51,19 +57,30 @@ export const state = () => ({
 export const getters = {}
 
 export const mutations = {
-  // Company
+  // カンパニー
   setCompanyList (state, payload) {
     state.company.list = payload
   },
   setCurrentCompany (state, payload) {
     state.company.current = payload
   },
-  // 共有プロジェクト
+  // カンパニー作成ユーザー(名前も変数で出したいので、各カラムを配列で取得)
+  setCompanyUsersOwnerList (state, payload) {
+    state.companyUsers.ownerUser = payload
+  },
+  // カンパニー参加ユーザー
+  setCompanyUsersList (state, payload) {
+    state.companyUsers.list = payload
+  },
+  // カンパニー(共有)プロジェクト
   setCompanyProjectList (state, payload) {
     state.companyProject.list = payload
   },
   setCompanyProjectCurrent (state, payload) {
     state.companyProject.current = payload
+  },
+  setCompanyTasks (state, payload) {
+    state.companyProject.task = payload
   },
   // 個人プロジェクト
   setProjestList (state, payload) {
@@ -71,6 +88,9 @@ export const mutations = {
   },
   setCurrentProject (state, payload) {
     state.project.current = payload
+  },
+  setTasks (state, payload) {
+    state.project.task = payload
   },
   // 自分のユーザー
   setCurrentUser (state, payload) {
@@ -93,9 +113,6 @@ export const mutations = {
   },
   setRememberPath (state, payload) {
     state.loggedIn.rememberPath = payload
-  },
-  setTasks (state, payload) {
-    state.project.task = payload
   }
 }
 
@@ -106,21 +123,29 @@ export const actions = {
     commit('setCompanyList', companies)
   },
   getCurrentCompany ({ state, commit }, params) {
-    console.log('getCurrentCompany/params', params)
     let currentCompany = null
     if (params && params.id) {
       const id = Number(params.id)
       currentCompany = state.company.list.find(company => company.id === id) || null
     }
-    console.log('getCurrentCompany', currentCompany)
     commit('setCurrentCompany', currentCompany)
   },
-  // 共有プロジェクト
+  // Company作成ユーザー
+  getCompanyUsersOwnerList ({ commit }, ownerUser) {
+    ownerUser = ownerUser || []
+    commit('setCompanyUsersOwnerList', ownerUser)
+  },
+  // Company参加ユーザー
+  getCompanyUsersList ({ commit }, companyUsers) {
+    companyUsers = companyUsers || []
+    commit('setCompanyUsersList', companyUsers)
+  },
+  // カンパニー(共有)プロジェクト
   getCompanyProjectList ({ commit }, projects) {
     projects = projects || []
     commit('setCompanyProjectList', projects)
   },
-  // 共有プロジェクトのプロジェクトの選択
+  // カンパニー(共有)プロジェクトのプロジェクトの選択
   getCompanyProjectCurrent ({ state, commit }, params) {
     let companyProjectCurrent = null
     if (params && params.projectId) {
@@ -129,6 +154,10 @@ export const actions = {
     }
 
     commit('setCompanyProjectCurrent', companyProjectCurrent)
+  },
+  getCompanyTasks ({ commit }, tasks) {
+    tasks = tasks || []
+    commit('setCompanyTasks', tasks)
   },
   // 個人プロジェクト
   getProjectList ({ commit }, projects) {
@@ -143,6 +172,10 @@ export const actions = {
     }
 
     commit('setCurrentProject', currentProject)
+  },
+  getTasks ({ commit }, tasks) {
+    tasks = tasks || []
+    commit('setTasks', tasks)
   },
   getCurrentUser ({ commit }, user) {
     commit('setCurrentUser', user)
@@ -174,9 +207,5 @@ export const actions = {
     }
     params = params || {}
     commit('setRememberPath', { name, params })
-  },
-  getTasks ({ commit }, tasks) {
-    tasks = tasks || []
-    commit('setTasks', tasks)
   }
 }

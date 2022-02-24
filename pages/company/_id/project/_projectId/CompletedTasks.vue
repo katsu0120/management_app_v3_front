@@ -1,14 +1,7 @@
 <template>
   <v-container>
-    <v-card
-      :loading="loading"
-      class="mx-auto my-12"
-      max-width="1900"
-    >
-      <v-divider
-        class="mx-6"
-      />
-      <!--  Current_projectのTasks一覧--------------------------- -->
+    <!--  Current_CompanyProjectのTasks一覧------------------------------------------------------------------------------------- -->
+    <v-card>
       <v-container>
         <v-row justify="center">
           <v-col
@@ -16,24 +9,14 @@
             class="my-0"
           >
             <v-card-title>
-              完了したタスク
-              <!-- <v-row justify="end">
-                <v-btn
-                  color="primary"
-                  dark
-                  @click="dialog = true"
-                >
-                  追加
-                </v-btn>
-              </v-row> -->
+              完了済みTask一覧
             </v-card-title>
 
             <v-divider class="mb-4" />
 
             <v-data-table
               :headers="tableHeaders"
-              :items="incompleteTasks"
-              :items-per-page="15"
+              :items="completeTasks"
               item-key="id"
             >
               <template #[`item.id`]="{ item }">
@@ -135,38 +118,59 @@
 
 <script>
 export default {
-  name: 'PagesProjectDetails',
-  middleware: ['get-project-task'],
+  layout: 'company-project-details',
+  middleware: ['get-company-current', 'get-company-project-list', 'get-company-project-current', 'get-company-project-task'],
   data () {
     return {
       loading: false,
-      // dialog: false,
-      deleteDialog: false,
       undoTaskDialog: false,
-      // params: { project: { id: '' }, task: { title: '', content: '' } },
-      editProjectParams: { id: '', title: '', content: '', updated_at: '' },
-      editTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
-      undoTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: false } },
-      deleteTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
+      deleteDialog: false,
+      // params一覧---------------------------------------------------------
+      undoTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: false }, company: { id: '' } },
+      deleteTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' }, company: { id: '' } },
+      projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
+        { text: '状態', width: 50, value: 'completed', sortable: false },
         { text: '作成日', width: 100, value: 'created_at', sortable: false },
-        { text: '更新日', width: 100, value: 'updated_at', sortable: false },
+        { text: '完了日', width: 100, value: 'updated_at', sortable: false },
         { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
       ]
     }
   },
   computed: {
+    currentCompany () {
+      const company = this.$store.state.company.current
+      return company
+    },
     currentProject () {
-      const id = this.$store.state.project.current.id
-      const title = this.$store.state.project.current.title
-      const content = this.$store.state.project.current.content
+      const id = this.$store.state.companyProject.current.id
+      const title = this.$store.state.companyProject.current.title
+      const content = this.$store.state.companyProject.current.content
       return { id, title, content }
     },
+    recentProjects () {
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
+      return copyProjects.sort((a, b) => {
+        if (a.updated_at > b.updated_at) { return -1 }
+        if (a.updated_at < b.updated_at) { return 1 }
+        return 0
+      })
+    },
+    // completed:trueステータスのprojectsを返す
+    incompleteProjects () {
+      const projectList = []
+      this.recentProjects.forEach((project) => {
+        if (project.completed) {
+          projectList.push(project)
+        }
+      })
+      return projectList
+    },
     recentTasks () {
-      const copyTasks = Array.from(this.$store.state.project.task)
+      const copyTasks = Array.from(this.$store.state.companyProject.task)
       return copyTasks.sort((a, b) => {
         if (a.updated_at > b.updated_at) { return -1 }
         if (a.updated_at < b.updated_at) { return 1 }
@@ -174,7 +178,7 @@ export default {
       })
     },
     // completedがfalseのTaskを返す
-    incompleteTasks () {
+    completeTasks () {
       const taskList = []
       this.recentTasks.forEach((task) => {
         if (task.completed) {
@@ -186,22 +190,23 @@ export default {
   },
   methods: {
     async projectUpdatedAt () {
-      this.editProjectParams.id = this.currentProject.id
-      this.editProjectParams.title = this.currentProject.title
-      this.editProjectParams.content = this.currentProject.content
-      this.editProjectParams.updated_at = new Date()
-      await this.$axios.$put('/api/v1/projects', this.editProjectParams)
+      this.projectUpdatedAtParams.company.id = this.currentCompany.id
+      this.projectUpdatedAtParams.project.id = this.currentProject.id
+      this.projectUpdatedAtParams.project.title = this.currentProject.title
+      this.projectUpdatedAtParams.project.content = this.currentProject.content
+      this.projectUpdatedAtParams.project.updated_at = new Date()
+      await this.$axios.$put('/api/v1/company_projects', this.projectUpdatedAtParams)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
     },
-    async successUpdate (response) {
-      await this.$axios.$get('/api/v1/projects')
-        .then(projects => this.$store.dispatch('getProjectList', projects))
-    },
-    failureUpdate (response) {
+    successUpdate (response) {
       console.log(response)
     },
+    failureUpdate (error) {
+      console.log(error)
+    },
     undoTaskDialogOpen (item) {
+      this.undoTaskParams.company.id = this.currentCompany.id
       this.undoTaskParams.project.id = this.currentProject.id
       this.undoTaskParams.task.id = item.id
       this.undoTaskParams.task.title = item.title
@@ -210,7 +215,7 @@ export default {
     },
     async undoTask () {
       this.loading = true
-      await this.$axios.$put('/api/v1/tasks', this.undoTaskParams)
+      await this.$axios.$put('/api/v1/company_tasks', this.undoTaskParams)
         .then(response => this.succecUndoTask(response))
         .catch(error => this.undoTaskFailure(error))
       this.loading = false
@@ -218,20 +223,21 @@ export default {
     },
     succecUndoTask (response) {
       const ChangeBeforeTask = this.undoTaskParams.task.id
-      const copyTasks = Array.from(this.$store.state.project.task)
+      const copyTasks = Array.from(this.$store.state.companyProject.task)
       const taskList = []
       copyTasks.forEach((tasks) => {
         if (ChangeBeforeTask !== tasks.id) {
           taskList.push(tasks)
         }
       })
-      this.$store.dispatch('getTasks', taskList)
+      this.$store.dispatch('getCompanyTasks', taskList)
       this.projectUpdatedAt()
     },
     undoTaskFailure (error) {
       console.log(error)
     },
     deleteDialogOpen (item) {
+      this.deleteTaskParams.company.id = this.currentCompany.id
       this.deleteTaskParams.project.id = this.currentProject.id
       this.deleteTaskParams.task.id = item.id
       this.deleteTaskParams.task.title = item.title
@@ -240,22 +246,22 @@ export default {
     },
     async deleteTask () {
       this.loading = true
-      await this.$axios.$delete('/api/v1/tasks', { data: this.deleteTaskParams })
+      await this.$axios.$delete('/api/v1/company_tasks', { data: this.deleteTaskParams })
         .then(response => this.successDelete(response))
         .catch(error => this.failureDelete(error))
       this.loading = false
       this.deleteDialog = false
     },
-    successDelete (responce) {
-      const ChangeBeforeTask = responce.id
-      const copyTasks = Array.from(this.$store.state.project.task)
+    successDelete (response) {
+      const ChangeBeforeTask = response.id
+      const copyTasks = Array.from(this.$store.state.companyProject.task)
       const taskList = []
       copyTasks.forEach((tasks) => {
         if (ChangeBeforeTask !== tasks.id) {
           taskList.push(tasks)
         }
       })
-      this.$store.dispatch('getTasks', taskList)
+      this.$store.dispatch('getCompanyTasks', taskList)
       this.projectUpdatedAt()
     },
     failureDelete (error) {

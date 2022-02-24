@@ -15,10 +15,11 @@
     "login" : "ログイン",
     "logout": "ログアウト",
     "NewProject": "新規プロジェクト",
-    "dashboard": "ダッシュボード",
+    "CompletedPersonalProjects": "完了したプロジェクト",
     "PasswordReset": "パスワードを忘れた",
     "PasswordResetResetting": "パスワードの変更",
     "companies": "Company一覧",
+    "projects": "個人プロジェクト",
     "AccountDetails": {
       "settings": "設定",
       "password": "パスワード変更",
@@ -31,7 +32,22 @@
     },
     "company": {
       "id": {
-        "CompanyDetails": "共有プロジェクト"
+        "CompanyDetails": "共有プロジェクト",
+        "CompanyUsers": "参加ユーザー",
+        "CompanyCompletedDetails": "完了したプロジェクト",
+        "project": {
+          "projectId": {
+            "CompanyProjectDetails": "共有プロジェクト詳細",
+            "CompletedCompanyProjectDetails": "完了した共有プロジェクト詳細",
+            "CompletedTasks": "完了タスク一覧"
+          }
+        },
+        "completedProject": {
+          "projectId": {
+            "CompletedCompanyProjectDetails": "完了プロジェクト詳細",
+            "CompletedTasks": "完了タスク一覧"
+          }
+        } 
       }
     },
     "project": {
