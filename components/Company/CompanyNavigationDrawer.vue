@@ -64,8 +64,6 @@ export default {
         { name: 'company-id-CompanyDetails', icon: 'mdi-share-all' },
         { name: 'company-id-CompanyCompletedDetails', icon: 'mdi-calendar-check' },
         { name: 'company-id-CompanyUsers', icon: 'mdi-account-group-outline' }
-        // TODO削除
-        // { name: 'company-id-CompanyCompletedProjectDetails', icon: 'mdi-calendar-check' },
       ]
     }
   },
