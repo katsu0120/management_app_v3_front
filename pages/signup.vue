@@ -40,8 +40,7 @@ export default {
     return {
       isValid: false,
       loading: false,
-      // TOCO削除
-      params: { user: { name: 'test', email: 'gragrand5858@gmail.com', password: 'password' } }
+      params: { user: { name: '', email: '', password: '' } }
     }
   },
   methods: {

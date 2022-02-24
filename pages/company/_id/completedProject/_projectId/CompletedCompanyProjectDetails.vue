@@ -314,7 +314,7 @@ export default {
     },
     async deleteProject () {
       this.loading = true
-      await this.$axios.$delete('/api/v1/projects', { data: this.deleteProjectParams })
+      await this.$axios.$delete('/api/v1/company_projects', { data: this.deleteProjectParams })
         .then(response => this.deleteComplete(response))
         .catch(error => this.deleteFailure(error))
       this.loading = false
@@ -322,7 +322,7 @@ export default {
     },
     deleteComplete (response) {
       alert('プロジェクトを削除いたしました')
-      const copyProjects = Array.from(this.$store.state.project.list)
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
       const projectList = []
       copyProjects.forEach((projects) => {
         if (this.deleteProjectParams.project.id !== projects.id) {
