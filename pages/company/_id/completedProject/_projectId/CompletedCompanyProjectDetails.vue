@@ -279,8 +279,6 @@ export default {
       this.incompleteProjectParams.project.id = this.currentProject.id
       this.incompleteProjectParams.project.title = this.currentProject.title
       this.incompleteProjectParams.project.content = this.currentProject.content
-      console.log('この下がincompleteProjectParams')
-      console.log(this.incompleteProjectParams)
       this.incompleteProjectDialog = true
     },
     incompleteProject () {
@@ -292,7 +290,6 @@ export default {
       this.incompleteProjectDialog = false
     },
     successIncompleteProject (response) {
-      console.log(response)
       alert('プロジェクトを未完了に戻しました')
       const copyProjects = Array.from(this.$store.state.companyProject.list)
       const projectList = []
@@ -313,8 +310,6 @@ export default {
       this.deleteProjectParams.project.id = this.currentProject.id
       this.deleteProjectParams.project.title = this.currentProject.title
       this.deleteProjectParams.project.content = this.currentProject.content
-      console.log('この下がdeleteProjectParams')
-      console.log(this.deleteProjectParams)
       this.deleteProjectDialog = true
     },
     async deleteProject () {
@@ -326,7 +321,6 @@ export default {
       this.deleteProjectDialog = false
     },
     deleteComplete (response) {
-      console.log(response)
       alert('プロジェクトを削除いたしました')
       const copyProjects = Array.from(this.$store.state.project.list)
       const projectList = []

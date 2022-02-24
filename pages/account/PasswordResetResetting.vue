@@ -62,7 +62,6 @@ export default {
       return this.$store.dispatch('getToast', { msg, color })
     },
     successfullPasswordReset (response) {
-      console.log('successfullPasswordReset', response)
       alert('パスワードの変更が完了しました')
       this.$router.push('/')
     },

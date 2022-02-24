@@ -458,7 +458,6 @@ export default {
       this.projectCompleteDialog = true
     },
     projectComplete () {
-      console.log('projectComplete')
       this.loading = true
       this.$axios.$put('/api/v1/projects', this.projectCompleteParams)
         .then(response => this.successProjectComplete(response))

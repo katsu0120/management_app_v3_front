@@ -65,7 +65,6 @@ export default {
       }
     },
     signUpFailure ({ response }) {
-      console.log(response)
       const msg = 'エラーです'
       const color = 'error'
       this.$store.dispatch('getToast', { msg, color })
