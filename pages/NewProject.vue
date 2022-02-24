@@ -1,13 +1,10 @@
 <template>
+  <!-- TODO削除 -->
   <v-container>
     <v-card
       class="mx-auto my-12"
       max-width="900"
     >
-      <!-- <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-        height="200px"
-      /> -->
       <v-card-title class="ml-2 pb-0 pt-4">
         新規プロジェクトの作成
       </v-card-title>

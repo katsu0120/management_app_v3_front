@@ -38,13 +38,12 @@
             <v-card-actions>
               <v-text-field
                 v-model="currentProject.title"
-                readonly
-                label="ProjectTitle"
+                label="CompanyProjectTitle"
                 placeholder="projectのタイトル"
                 max-width="100"
                 class="mb-0 text-h6"
                 height="30"
-                @blur="notEditProject"
+                readonly
               />
             </v-card-actions>
           </v-col>
@@ -71,14 +70,13 @@
             >
               <v-textarea
                 v-model="currentProject.content"
-                readonly
                 label="content"
                 auto-grow
                 placeholder="プロジェクト詳細"
                 outlined
                 rows="8"
                 class=" mb-0"
-                @blur="notEditProject"
+                readonly
               />
             </v-card-actions>
           </v-col>
@@ -87,7 +85,7 @@
       <v-divider
         class="mx-6"
       />
-      <!--  Current_projectのTasks一覧--------------------------- -->
+      <!--  Current_CompanyProjectの完了Tasks一覧------------------------------------------------------------------------------------- -->
       <v-container>
         <v-row justify="center">
           <v-col
@@ -95,7 +93,7 @@
             class="my-0"
           >
             <v-card-title>
-              Task一覧
+              完了Task一覧
             </v-card-title>
 
             <v-divider class="mb-4" />
@@ -103,7 +101,6 @@
             <v-data-table
               :headers="tableHeaders"
               :items="incompleteTasks"
-              :items-per-page="10"
               item-key="id"
             >
               <template #[`item.id`]="{ item }">
@@ -189,17 +186,18 @@
 
 <script>
 export default {
-  name: 'PagesProjectDetails',
-  middleware: ['get-project-task'],
+  layout: 'company-project-completed-details',
+  middleware: ['get-company-current', 'get-company-project-list', 'get-company-project-current', 'get-company-project-task'],
   data () {
     return {
       loading: false,
+      dialog: false,
       incompleteProjectDialog: false,
       deleteProjectDialog: false,
       // params一覧---------------------------------------------------------
-      deleteProjectParams: { id: '', title: '', content: '', updated_at: '' },
-      editProjectParams: { id: '', title: '', content: '', updated_at: '' },
-      incompleteProjectParams: { id: '', title: '', content: '', completed: false },
+      deleteProjectParams: { project: { id: '', title: '', content: '' }, company: { id: '' } },
+      projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
+      incompleteProjectParams: { project: { id: '', title: '', content: '', completed: false }, company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
@@ -210,25 +208,47 @@ export default {
     }
   },
   computed: {
+    currentCompany () {
+      const company = this.$store.state.company.current
+      return company
+    },
     currentProject () {
-      const id = this.$store.state.project.current.id
-      const title = this.$store.state.project.current.title
-      const content = this.$store.state.project.current.content
+      const id = this.$store.state.companyProject.current.id
+      const title = this.$store.state.companyProject.current.title
+      const content = this.$store.state.companyProject.current.content
       return { id, title, content }
     },
+    recentProjects () {
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
+      return copyProjects.sort((a, b) => {
+        if (a.updated_at > b.updated_at) { return -1 }
+        if (a.updated_at < b.updated_at) { return 1 }
+        return 0
+      })
+    },
+    // completed:falseステータスのprojectsを返す
+    incompleteProjects () {
+      const projectList = []
+      this.recentProjects.forEach((project) => {
+        if (!project.completed) {
+          projectList.push(project)
+        }
+      })
+      return projectList
+    },
     recentTasks () {
-      const copyTasks = Array.from(this.$store.state.project.task)
+      const copyTasks = Array.from(this.$store.state.companyProject.task)
       return copyTasks.sort((a, b) => {
         if (a.updated_at > b.updated_at) { return -1 }
         if (a.updated_at < b.updated_at) { return 1 }
         return 0
       })
     },
-    // completedがfalseのTaskを返す
+    // completedがtrueのTaskを返す
     incompleteTasks () {
       const taskList = []
       this.recentTasks.forEach((task) => {
-        if (!task.completed) {
+        if (task.completed) {
           taskList.push(task)
         }
       })
@@ -236,60 +256,65 @@ export default {
     }
   },
   methods: {
-    notEditProject () {
-      console.log('readOnly')
-    },
-    // プロジェクトをupdateした際にupdate_atを更新するメソッド
+    // Task追加や編集した場合にもprojectを最新にしてprojectを一番最新にするメソッド
     async projectUpdatedAt () {
-      this.editProjectParams.id = this.currentProject.id
-      this.editProjectParams.title = this.currentProject.title
-      this.editProjectParams.content = this.currentProject.content
-      this.editProjectParams.updated_at = new Date()
-      await this.$axios.$put('/api/v1/projects', this.editProjectParams)
+      this.projectUpdatedAtParams.company.id = this.currentCompany.id
+      this.projectUpdatedAtParams.project.id = this.currentProject.id
+      this.projectUpdatedAtParams.project.title = this.currentProject.title
+      this.projectUpdatedAtParams.project.content = this.currentProject.content
+      this.projectUpdatedAtParams.project.updated_at = new Date()
+      await this.$axios.$put('/api/v1/company_projects', this.projectUpdatedAtParams)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
     },
-    async successUpdate (response) {
-      await this.$axios.$get('/api/v1/projects')
-        .then(projects => this.$store.dispatch('getProjectList', projects))
-    },
-    failureUpdate (response) {
+    successUpdate (response) {
       console.log(response)
     },
+    failureUpdate (error) {
+      console.log(error)
+    },
+    // 完了projectを未完了に戻すメソッド
     incompleteProjectDialogOpen () {
-      this.incompleteProjectParams.id = this.currentProject.id
-      this.incompleteProjectParams.title = this.currentProject.title
-      this.incompleteProjectParams.content = this.currentProject.content
+      this.incompleteProjectParams.company.id = this.currentCompany.id
+      this.incompleteProjectParams.project.id = this.currentProject.id
+      this.incompleteProjectParams.project.title = this.currentProject.title
+      this.incompleteProjectParams.project.content = this.currentProject.content
+      console.log('この下がincompleteProjectParams')
+      console.log(this.incompleteProjectParams)
       this.incompleteProjectDialog = true
     },
     incompleteProject () {
       this.loading = true
-      this.$axios.$put('/api/v1/projects', this.incompleteProjectParams)
+      this.$axios.$put('/api/v1/company_projects', this.incompleteProjectParams)
         .then(response => this.successIncompleteProject(response))
         .catch(error => this.failureIncompleteProject(error))
       this.loading = false
       this.incompleteProjectDialog = false
     },
     successIncompleteProject (response) {
+      console.log(response)
       alert('プロジェクトを未完了に戻しました')
-      const copyProjects = Array.from(this.$store.state.project.list)
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
       const projectList = []
       copyProjects.forEach((projects) => {
-        if (this.incompleteProjectParams.id !== projects.id) {
+        if (this.incompleteProjectParams.project.id !== projects.id) {
           projectList.push(projects)
         }
       })
-      this.$store.dispatch('getProjectList', projectList)
+      this.$store.dispatch('getCompanyProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/projects')
+      this.$router.push(`/company/${this.currentCompany.id}/CompanyCompletedDetails`)
     },
     failureIncompleteProject (error) {
       console.log(error)
     },
     deleteProjectDialogOpen () {
-      this.deleteProjectParams.id = this.currentProject.id
-      this.deleteProjectParams.title = this.currentProject.title
-      this.deleteProjectParams.content = this.currentProject.content
+      this.deleteProjectParams.company.id = this.currentCompany.id
+      this.deleteProjectParams.project.id = this.currentProject.id
+      this.deleteProjectParams.project.title = this.currentProject.title
+      this.deleteProjectParams.project.content = this.currentProject.content
+      console.log('この下がdeleteProjectParams')
+      console.log(this.deleteProjectParams)
       this.deleteProjectDialog = true
     },
     async deleteProject () {
@@ -301,16 +326,17 @@ export default {
       this.deleteProjectDialog = false
     },
     deleteComplete (response) {
+      console.log(response)
       alert('プロジェクトを削除いたしました')
       const copyProjects = Array.from(this.$store.state.project.list)
       const projectList = []
       copyProjects.forEach((projects) => {
-        if (this.deleteProjectParams.id !== projects.id) {
+        if (this.deleteProjectParams.project.id !== projects.id) {
           projectList.push(projects)
         }
       })
-      this.$store.dispatch('getProjectList', projectList)
-      this.$router.push('/projects')
+      this.$store.dispatch('getCompanyProjectList', projectList)
+      this.$router.push(`/company/${this.currentCompany.id}/CompanyCompletedDetails`)
     },
     deleteFailure (error) {
       console.log(error)

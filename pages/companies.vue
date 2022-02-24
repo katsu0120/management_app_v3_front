@@ -22,20 +22,24 @@
               :md="container.md"
             >
               <v-card-title
-                class="white--text"
+                class="white--text pb-1"
               >
-                最近選択したカンパニー
+                <h3>参加Company一覧</h3>
               </v-card-title>
 
               <v-divider
                 dark
-                class="mb-4"
               />
+              <v-card-subtitle
+                class="white--text"
+              >
+                <h4>最近選択したカンパニー</h4>
+              </v-card-subtitle>
 
               <v-row
                 align="center"
               >
-                <!-- カンパニーの追加 -->
+                <!-- カンパニーの追加 --------------------------------------->
                 <v-col
                   cols="12"
                   :sm="card.sm"
@@ -45,13 +49,13 @@
                     block
                     :height="card.height"
                     :elevation="card.elevation"
-                    to="/newProject"
+                    @click="newCompanyDialog = true"
                   >
                     <div>
                       <v-icon
                         size="24"
                         color="myblue"
-                        class="my-2 pl-10"
+                        class="my-2 pl-2"
                       >
                         mdi-plus
                       </v-icon>
@@ -63,7 +67,7 @@
                     </div>
                   </v-btn>
                 </v-col>
-                <!-- 最近のカンパニー -->
+                <!-- 最近のカンパニー ---------------------------------->
                 <v-col
                   v-for="(company, i) in recentCompanies.slice(0, 2)"
                   :key="`card-company-${i}`"
@@ -101,7 +105,7 @@
         </v-container>
       </v-img>
     </v-parallax>
-    <!-- 全てのプロジェクト -->
+    <!-- 全てのカンパニー ------------------------------------------------->
     <v-container>
       <v-row justify="center">
         <v-col
@@ -139,12 +143,66 @@
               {{ $my.dateFormat(item.updated_at) }}
             </template>
             <template #no-data>
-              <h3>プロジェクトがありません</h3>
+              <h3>カンパニーがありません</h3>
             </template>
           </v-data-table>
         </v-col>
       </v-row>
     </v-container>
+    <!-- newCompanyDialog ------------------------------------------------->
+    <v-dialog
+      v-model="newCompanyDialog"
+      max-width="600px"
+    >
+      <v-card
+        max-width="700"
+      >
+        <v-card-title class="my-0 pt-5">
+          <v-row>
+            <v-col
+              cols="12"
+              xs="10"
+              sm="10"
+              md="10"
+              lg="10"
+              xl="10"
+            >
+              <v-row>
+                <v-card-title>
+                  <span class="text-h6">カンパニーの追加</span>
+                </v-card-title>
+              </v-row>
+              <v-card-actions>
+                <v-text-field
+                  v-model="params.company.name"
+                  label="NewCompanyTitle"
+                  placeholder="新規カンパニーのタイトル"
+                  autofocus
+                  max-width="100"
+                  class="my-0 text-h6"
+                  cols="3"
+                />
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-card-title>
+        <v-divider
+          class="my-2"
+        />
+        <v-card-actions>
+          <v-row justify="center">
+            <v-btn
+              color="primary"
+              class="my-4"
+              :loading="loading"
+              @click="createCompany"
+            >
+              新規作成
+            </v-btn>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -155,6 +213,9 @@ export default {
   layout: 'company',
   data () {
     return {
+      params: { company: { name: '' } },
+      newCompanyDialog: false,
+      loading: false,
       companyImg,
       container: {
         sm: 10,
@@ -163,7 +224,7 @@ export default {
       card: {
         sm: 6,
         md: 4,
-        height: 120,
+        height: 110,
         elevation: 4
       },
       tableHeaders: [
@@ -182,22 +243,29 @@ export default {
         if (a.updated_at < b.updated_at) { return 1 }
         return 0
       })
+    },
+    currentCompany () {
+      const companyId = this.$store.state.company.current
+      return companyId
     }
   },
   methods: {
-    async test () {
+    async createCompany () {
       this.loading = true
-      await this.$axios.$get('/api/v1/companies')
-        .then(response => this.Successful(response))
-        .catch(error => this.Failure(error))
+      await this.$axios.$post('api/v1/companies', this.params)
+        .then(response => this.successCompanyCreate(response))
+        .catch(error => this.failureCompanyCreate(error))
       this.loading = false
+      this.newCompanyDialog = false
+      this.params.company.name = ''
     },
-    Successful (response) {
-      console.log('この下がSuccessful')
-      console.log(response)
+    successCompanyCreate (response) {
+      const companyId = response.id
+      this.$router.push({ path: `/company/${companyId}/CompanyDetails` })
+      alert('カンパニーが新規作成されました')
     },
-    Failure () {
-      console.log('エラー')
+    failureCompanyCreate (error) {
+      console.log(error)
     }
   }
 }

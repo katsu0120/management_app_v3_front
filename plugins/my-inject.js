@@ -25,6 +25,11 @@ class MyInject {
     return { name, params: { id } }
   }
 
+  // カンパニーリンク
+  companyProjectLinkTo (id, projectId, name = 'company-id-project-projectId-CompanyProjectDetails') {
+    return { name, params: { id, projectId } }
+  }
+
   // プロジェクトリンク
   projectLinkTo (id, name = 'project-id-ProjectDetails') {
     return { name, params: { id } }

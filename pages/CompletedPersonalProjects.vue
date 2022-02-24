@@ -24,7 +24,7 @@
               <v-card-title
                 class="white--text"
               >
-                完了したプロジェクト
+                完了した個人プロジェクト
               </v-card-title>
 
               <v-divider
@@ -82,7 +82,7 @@
           :md="container.md"
         >
           <v-card-title>
-            完了したプロジェクト
+            完了した個人プロジェクト
           </v-card-title>
 
           <v-divider class="mb-4" />

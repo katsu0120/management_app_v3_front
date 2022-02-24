@@ -58,10 +58,10 @@ export default {
       const msg = response.data.msg
       const color = response.data.color
       this.$store.dispatch('getToast', { msg, color })
-      if (color === '#00796B') {
+      if (color === '#0091EA') {
         setTimeout(() => {
           this.$router.push('/')
-        }, 2000)
+        }, 3000)
       }
     },
     signUpFailure ({ response }) {

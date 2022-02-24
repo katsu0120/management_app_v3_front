@@ -33,7 +33,7 @@
       <v-list-item
         v-for="(nav, i) in navMenus"
         :key="`nav-${i}`"
-        :to="$my.projectLinkTo($route.params.id, nav.name)"
+        :to="$my.companyProjectLinkTo($route.params.id, $route.params.projectId, nav.name)"
       >
         <v-list-item-icon>
           <v-icon v-text="nav.icon" />
@@ -61,10 +61,10 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
-        { name: 'projects', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-ProjectDetails', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-CompletedTasks', icon: 'mdi-checkbox-marked-circle' },
-        { name: 'CompletedPersonalProjects', icon: 'mdi-calendar-check' }
+        { name: 'company-id-CompanyDetails', icon: 'mdi-share-all' },
+        { name: 'company-id-completedProject-projectId-CompletedCompanyProjectDetails', icon: 'mdi-note-search-outline' },
+        { name: 'company-id-completedProject-projectId-CompletedTasks', icon: 'mdi-checkbox-marked-circle' },
+        { name: 'company-id-CompanyCompletedDetails', icon: 'mdi-calendar-check' }
       ]
     }
   },
@@ -76,6 +76,14 @@ export default {
     isMobileBreakpointLessThan () {
       const windowWidth = this.$vuetify.breakpoint.width
       return this.mobileBreakpoint > windowWidth
+    },
+    recentProjects () {
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
+      return copyProjects.sort((a, b) => {
+        if (a.updated_at > b.updated_at) { return -1 }
+        if (a.updated_at < b.updated_at) { return 1 }
+        return 0
+      })
     }
   }
 }

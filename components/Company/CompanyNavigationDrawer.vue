@@ -61,10 +61,11 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
-        { name: 'projects', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-ProjectDetails', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-CompletedTasks', icon: 'mdi-checkbox-marked-circle' },
-        { name: 'CompletedPersonalProjects', icon: 'mdi-calendar-check' }
+        { name: 'company-id-CompanyDetails', icon: 'mdi-share-all' },
+        { name: 'company-id-CompanyCompletedDetails', icon: 'mdi-calendar-check' },
+        { name: 'company-id-CompanyUsers', icon: 'mdi-account-group-outline' }
+        // TODO削除
+        // { name: 'company-id-CompanyCompletedProjectDetails', icon: 'mdi-calendar-check' },
       ]
     }
   },
@@ -76,6 +77,14 @@ export default {
     isMobileBreakpointLessThan () {
       const windowWidth = this.$vuetify.breakpoint.width
       return this.mobileBreakpoint > windowWidth
+    },
+    recentProjects () {
+      const copyProjects = Array.from(this.$store.state.companyProject.list)
+      return copyProjects.sort((a, b) => {
+        if (a.updated_at > b.updated_at) { return -1 }
+        if (a.updated_at < b.updated_at) { return 1 }
+        return 0
+      })
     }
   }
 }
