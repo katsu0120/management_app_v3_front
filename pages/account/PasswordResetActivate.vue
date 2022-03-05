@@ -24,6 +24,9 @@ export default {
     },
     validToken (response) {
       this.$auth.login(response)
+      const color = 'success'
+      const msg = '新しいパスワードの設定を行って下さい😄'
+      this.$store.dispatch('getToast', { msg, color })
       this.$router.push('/account/PasswordResetResetting')
     },
     invalidToken (error) {

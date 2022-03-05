@@ -197,13 +197,14 @@ export default {
       // params一覧---------------------------------------------------------
       deleteProjectParams: { project: { id: '', title: '', content: '' }, company: { id: '' } },
       projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
-      incompleteProjectParams: { project: { id: '', title: '', content: '', completed: false }, company: { id: '' } },
+      incompleteProjectParams: { project: { id: '', title: '', content: '', updater: '', completed: false }, company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
-        { text: '作成日', width: 100, value: 'created_at', sortable: false },
-        { text: '更新日', width: 100, value: 'updated_at', sortable: false }
+        { text: '最終更新者', width: 100, value: 'updater', sortable: false },
+        { text: '更新日', width: 100, value: 'updated_at', sortable: false },
+        { text: '作成日', width: 100, value: 'created_at', sortable: false }
       ]
     }
   },
@@ -253,6 +254,10 @@ export default {
         }
       })
       return taskList
+    },
+    currentUser () {
+      const currentUser = this.$store.state.user.current
+      return currentUser
     }
   },
   methods: {
@@ -268,7 +273,6 @@ export default {
         .catch(error => this.failureUpdate(error))
     },
     successUpdate (response) {
-      console.log(response)
     },
     failureUpdate (error) {
       console.log(error)
@@ -279,6 +283,7 @@ export default {
       this.incompleteProjectParams.project.id = this.currentProject.id
       this.incompleteProjectParams.project.title = this.currentProject.title
       this.incompleteProjectParams.project.content = this.currentProject.content
+      this.incompleteProjectParams.project.updater = this.currentUser.name
       this.incompleteProjectDialog = true
     },
     incompleteProject () {

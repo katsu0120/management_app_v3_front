@@ -13,93 +13,102 @@
       <v-divider
         class="mx-4"
       />
-
-      <v-card-text>
-        <v-card-subtitle class=" mb-0 text-subtitle-1">
-          <v-icon class="mb-1">
-            mdi-account
-          </v-icon>
-          ユーザー名
-        </v-card-subtitle>
-        <v-row>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="10"
-            md="10"
-            lg="10"
-            xl="10"
-          >
-            <v-card-actions>
-              <v-text-field
-                v-model="userinformation.name"
-                label="name"
-                :rules="nameRules"
-                :counter="max"
-                autofocus
-                placeholder="あなたの表示名"
-              />
-              <v-btn
-                color="primary"
-                class="ml-2 mb-4"
-                :loading="loading"
-                @click="UserNameEdit"
-              >
-                更新
-              </v-btn>
-            </v-card-actions>
-          </v-col>
-        </v-row>
-      </v-card-text>
+      <v-form
+        v-model="isValid"
+        @submit.prevent="UserNameEdit"
+      >
+        <v-card-text>
+          <v-card-subtitle class=" mb-0 text-subtitle-1">
+            <v-icon class="mb-1">
+              mdi-account
+            </v-icon>
+            ユーザー名
+          </v-card-subtitle>
+          <v-row>
+            <v-col
+              cols="12"
+              xs="12"
+              sm="10"
+              md="10"
+              lg="10"
+              xl="10"
+            >
+              <v-card-actions>
+                <v-text-field
+                  v-model="userinformation.name"
+                  label="name"
+                  :rules="nameRules"
+                  :counter="max"
+                  autofocus
+                  placeholder="あなたの表示名"
+                />
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  class="ml-2 mb-4"
+                  :disabled="!isValid || loading"
+                >
+                  更新
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-form>
 
       <v-divider
         class="mx-4"
       />
-      <v-card-text>
-        <v-card-subtitle class=" mb-0 text-subtitle-1">
-          <v-icon class="mb-1 mr-1">
-            mdi-note-text-outline
-          </v-icon>
-          プロフィール文
-        </v-card-subtitle>
-        <v-row>
-          <v-col
-            cols="12"
-            xs="12"
-            sm="10"
-            md="10"
-            lg="10"
-            xl="10"
-          >
-            <v-card-actions>
-              <v-textarea
-                v-model="userinformation.UserProfile"
-                label="profile"
-                auto-grow
-                autofocus
-                placeholder="ご自身のプロフィール入力"
-                outlined
-                rows="10"
-              />
-            </v-card-actions>
-          </v-col>
-        </v-row>
-        <v-divider
-          class="my-2"
-        />
-        <v-card-actions>
-          <v-row justify="center">
-            <v-btn
-              color="primary"
-              class="my-4"
-              :loading="loading"
-              @click="UserProfileEdit"
+      <v-form
+        v-model="isValid"
+        @submit.prevent="UserProfileEdit"
+      >
+        <v-card-text>
+          <v-card-subtitle class=" mb-0 text-subtitle-1">
+            <v-icon class="mb-1 mr-1">
+              mdi-note-text-outline
+            </v-icon>
+            プロフィール文
+          </v-card-subtitle>
+          <v-row>
+            <v-col
+              cols="12"
+              xs="12"
+              sm="10"
+              md="10"
+              lg="10"
+              xl="10"
             >
-              更新
-            </v-btn>
+              <v-card-actions>
+                <v-textarea
+                  v-model="userinformation.UserProfile"
+                  label="profile"
+                  auto-grow
+                  autofocus
+                  placeholder="ご自身のプロフィール入力"
+                  outlined
+                  rows="10"
+                />
+              </v-card-actions>
+            </v-col>
           </v-row>
-        </v-card-actions>
-      </v-card-text>
+          <v-divider
+            class="my-2"
+          />
+          <v-card-actions>
+            <v-row justify="center">
+              <v-btn
+                type="submit"
+                color="primary"
+                class="my-4"
+                :loading="loading"
+              >
+                更新
+              </v-btn>
+            </v-row>
+          </v-card-actions>
+        </v-card-text>
+      </v-form>
     </v-card>
   </div>
 </template>
@@ -126,9 +135,10 @@ export default {
     userinformation () {
       const id = this.$store.state.user.information.data.id
       const name = this.$store.state.user.information.data.name
+      const oldName = this.$store.state.user.information.data.name
       const email = this.$store.state.user.information.data.email
       const UserProfile = this.$store.state.user.information.data.user_profile
-      return { id, name, email, UserProfile }
+      return { id, name, oldName, email, UserProfile }
     }
   },
   methods: {
@@ -143,7 +153,9 @@ export default {
       }
     },
     nameEditComplete (response) {
-      alert('ユーザー名の更新が完了しました')
+      const msg = response.msg
+      const color = response.color
+      this.$store.dispatch('getToast', { msg, color })
     },
     nameEditError (error) {
       console.log(error)
@@ -154,13 +166,15 @@ export default {
       this.params.user.email = this.userinformation.email
       this.params.user.user_profile = this.userinformation.UserProfile
       this.loading = true
-      await this.$axios.$put('/api/v1/users', this.params)
+      await this.$axios.$put('/api/v1/users/update_profile', this.params)
         .then(response => this.profileEditComplete(response))
         .catch(error => this.profileError(error))
       this.loading = false
     },
     profileEditComplete (response) {
-      alert('プロフィールの更新が完了しました')
+      const msg = response.msg
+      const color = response.color
+      this.$store.dispatch('getToast', { msg, color })
     },
     profileEditError (error) {
       console.log(error)

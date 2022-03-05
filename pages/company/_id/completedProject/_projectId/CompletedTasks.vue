@@ -59,9 +59,9 @@ export default {
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
-        { text: '状態', width: 50, value: 'completed', sortable: false },
-        { text: '作成日', width: 100, value: 'created_at', sortable: false },
-        { text: '完了日', width: 100, value: 'updated_at', sortable: false }
+        { text: '最終更新者', width: 100, value: 'updater', sortable: false },
+        { text: '完了日', width: 100, value: 'updated_at', sortable: false },
+        { text: '作成日', width: 100, value: 'created_at', sortable: false }
       ]
     }
   },
@@ -125,7 +125,6 @@ export default {
         .catch(error => this.failureUpdate(error))
     },
     successUpdate (response) {
-      console.log(response)
     },
     failureUpdate (error) {
       console.log(error)

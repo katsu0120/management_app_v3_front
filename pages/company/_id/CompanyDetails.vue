@@ -24,7 +24,7 @@
               <v-card-title
                 class="white--text"
               >
-                <h3>{{ currentCompany.name }}の共有プロジェクト</h3>
+                <h3>{{ currentCompany.name }}共有プロジェクト</h3>
               </v-card-title>
 
               <v-divider
@@ -234,13 +234,13 @@
 import companyProjectsImg from '~/assets/images/logged-in/Conference presentation _Monochromatic.png'
 export default {
   layout: 'company-details',
-  middleware: ['get-company-current', 'get-company-project-list'],
+  middleware: ['get-company-current', 'get-company-project-list', 'get-company-users-owner'],
   data () {
     return {
       companyProjectsImg,
       newProjectDialog: false,
       loading: false,
-      params: { project: { title: '', content: '', user_id: '' }, company: { id: '' } },
+      params: { project: { title: '', content: '', user_id: '', updater: '' }, company: { id: '' } },
       container: {
         sm: 20,
         md: 20
@@ -259,6 +259,7 @@ export default {
         { text: 'ID', width: 50, value: 'id', sortable: false },
         { text: '会社ID', width: 100, value: 'company_id', sortable: false },
         { text: 'プロジェクト名', value: 'title', sortable: false },
+        { text: '最終更新者', width: 100, value: 'updater', sortable: false },
         { text: '作成日', width: 150, value: 'created_at', sortable: false },
         { text: '更新日', width: 150, value: 'updated_at', sortable: false }
       ]
@@ -290,12 +291,18 @@ export default {
     currentUser () {
       const currentUser = this.$store.state.user.current
       return currentUser
+    },
+    // オーナーユーザー
+    ownerUserName () {
+      const ownerUser = this.$store.state.companyUsers.ownerUser.name
+      return ownerUser
     }
   },
   methods: {
     async create () {
       this.params.company.id = this.currentCompany.id
       this.params.project.user_id = this.currentUser.id
+      this.params.project.updater = this.currentUser.name
       this.loading = true
       await this.$axios.$post('/api/v1/company_projects', this.params)
         .then(response => this.success(response))

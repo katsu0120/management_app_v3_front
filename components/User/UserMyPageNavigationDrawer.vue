@@ -61,6 +61,8 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
+        { name: 'companies', icon: 'mdi-domain' },
+        { name: 'PersonalProjects', icon: 'mdi-note-text' },
         { name: 'AccountDetails-mypage', icon: 'mdi-card-account-details-outline' },
         { name: 'AccountDetails-settings', icon: 'mdi-cog' }
       ]

@@ -10,7 +10,8 @@ export const state = () => ({
     },
     rememberPath: {
       name: homePath,
-      params: {}
+      params: {},
+      query: {}
     },
     // ログイン後のアクセス不可ルート一覧
     redirectPaths: [
@@ -200,12 +201,13 @@ export const actions = {
     commit('setToast', { msg, color, timeout })
   },
   // ログイン前ユーザーがアクセスしたルートを記憶する
-  getRememberPath ({ state, commit }, { name, params }) {
+  getRememberPath ({ state, commit }, { name, params, query }) {
     // ログイン前パスが渡された場合はloggedIn.homePathに書き換える
     if (state.loggedIn.redirectPaths.includes(name)) {
       name = state.loggedIn.homePath.name
     }
     params = params || {}
-    commit('setRememberPath', { name, params })
+    query = query || {}
+    commit('setRememberPath', { name, params, query })
   }
 }

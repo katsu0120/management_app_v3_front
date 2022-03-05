@@ -8,10 +8,10 @@
 <script>
 export default {
   name: 'PagesProject',
-  layout: 'project',
+  layout: 'completed-project',
   // falseを返すページのアクセスを制限する
   validate ({ store, route }) {
-    return !!store.state.project.current && route.name !== 'project'
+    return !!store.state.project.current && route.name !== 'PersonalCompletedProject'
   }
 }
 </script>

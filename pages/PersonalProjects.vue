@@ -288,7 +288,7 @@ export default {
       this.$store.dispatch('getProjectList', copyProjects)
 
       const projectId = response.id
-      this.$router.push({ path: `/project/${projectId}/ProjectDetails` })
+      this.$router.push({ path: `/PersonalProject/${projectId}/ProjectDetails` })
       alert('新規作成されました')
     },
     createFailure (error) {

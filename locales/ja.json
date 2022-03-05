@@ -15,11 +15,11 @@
     "login" : "ログイン",
     "logout": "ログアウト",
     "NewProject": "新規プロジェクト",
-    "CompletedPersonalProjects": "完了したプロジェクト",
+    "PersonalCompletedProjects": "完了したプロジェクト",
     "PasswordReset": "パスワードを忘れた",
     "PasswordResetResetting": "パスワードの変更",
     "companies": "Company一覧",
-    "projects": "個人プロジェクト",
+    "PersonalProjects": "個人プロジェクト",
     "AccountDetails": {
       "settings": "設定",
       "password": "パスワード変更",
@@ -50,14 +50,14 @@
         } 
       }
     },
-    "project": {
+    "PersonalProject": {
       "id": {
         "ProjectDetails": "プロジェクト詳細",
         "CompletedTasks": "完了タスク一覧",
         "CompletedProjectDetails": "完了プロジェクト詳細"
       }
     },
-    "CompletedProject": {
+    "PersonalCompletedProject": {
       "id": {
         "CompletedProjectDetails": "完了プロジェクト詳細",
         "CompletedTasks": "完了タスク一覧"

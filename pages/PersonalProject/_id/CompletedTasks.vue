@@ -17,6 +17,15 @@
           >
             <v-card-title>
               完了したタスク
+              <!-- <v-row justify="end">
+                <v-btn
+                  color="primary"
+                  dark
+                  @click="dialog = true"
+                >
+                  追加
+                </v-btn>
+              </v-row> -->
             </v-card-title>
 
             <v-divider class="mb-4" />
@@ -38,6 +47,21 @@
               </template>
               <template #[`item.updated_at`]="{ item }">
                 {{ $my.dateFormat(item.updated_at) }}
+              </template>
+              <template #[`item.actions`]="{ item }">
+                <v-icon
+                  small
+                  @click="undoTaskDialogOpen(item)"
+                >
+                  mdi-arrow-u-left-top-bold
+                </v-icon>
+                <v-icon
+                  small
+                  class="mr-2"
+                  @click="deleteDialogOpen(item)"
+                >
+                  mdi-delete
+                </v-icon>
               </template>
               <template #no-data>
                 <h3>タスクがありません</h3>
@@ -129,12 +153,13 @@ export default {
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
         { text: '作成日', width: 100, value: 'created_at', sortable: false },
-        { text: '更新日', width: 100, value: 'updated_at', sortable: false }
+        { text: '更新日', width: 100, value: 'updated_at', sortable: false },
+        { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
       ]
     }
   },
   computed: {
-    CurrentProject () {
+    currentProject () {
       const id = this.$store.state.project.current.id
       const title = this.$store.state.project.current.title
       const content = this.$store.state.project.current.content
@@ -161,9 +186,9 @@ export default {
   },
   methods: {
     async projectUpdatedAt () {
-      this.editProjectParams.id = this.CurrentProject.id
-      this.editProjectParams.title = this.CurrentProject.title
-      this.editProjectParams.content = this.CurrentProject.content
+      this.editProjectParams.id = this.currentProject.id
+      this.editProjectParams.title = this.currentProject.title
+      this.editProjectParams.content = this.currentProject.content
       this.editProjectParams.updated_at = new Date()
       await this.$axios.$put('/api/v1/projects', this.editProjectParams)
         .then(response => this.successUpdate(response))
@@ -173,11 +198,11 @@ export default {
       await this.$axios.$get('/api/v1/projects')
         .then(projects => this.$store.dispatch('getProjectList', projects))
     },
-    failureUpdate (response) {
-      console.log(response)
+    failureUpdate (error) {
+      console.log(error)
     },
     undoTaskDialogOpen (item) {
-      this.undoTaskParams.project.id = this.CurrentProject.id
+      this.undoTaskParams.project.id = this.currentProject.id
       this.undoTaskParams.task.id = item.id
       this.undoTaskParams.task.title = item.title
       this.undoTaskParams.task.content = item.content
@@ -207,7 +232,7 @@ export default {
       console.log(error)
     },
     deleteDialogOpen (item) {
-      this.deleteTaskParams.project.id = this.CurrentProject.id
+      this.deleteTaskParams.project.id = this.currentProject.id
       this.deleteTaskParams.task.id = item.id
       this.deleteTaskParams.task.title = item.title
       this.deleteTaskParams.task.content = item.content
@@ -236,7 +261,6 @@ export default {
     failureDelete (error) {
       console.log(error)
     }
-
   }
 }
 </script>

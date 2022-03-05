@@ -10,9 +10,13 @@ export default {
   },
   async created () {
     // ② トークンが存在する場合、トークンを検証する
-    if (this.token) { await this.verifyToken() }
+    if (this.token) {
+      await this.verifyToken()
+    } else {
     // ③ トークンがnullの場合、何もせずリダイレクト
-    this.$router.replace('/')
+      // alert('無効なURLです。再度お手続きをやり直して下さい😭')
+      await this.$router.replace('/')
+    }
   },
   methods: {
     async verifyToken () {
@@ -28,8 +32,16 @@ export default {
     // ⑥ トークンの検証に成功した場合、ログインフラグをtrueとし、ログイン画面を表示する
     validToken (response) {
       this.$auth.login(response)
-      alert('会員登録が完了しました')
-      // ルートリダイレクト
+      const msg = '会員登録が完了いたしました。マネジメントアップをお楽しみ下さい😄'
+      const color = 'success'
+      this.$store.dispatch('getToast', { msg, color })
+      this.$router.push('/AccountDetails/mypage')
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 3000)
+    },
+    invalidToken (error) {
+      console.log(error)
       this.$router.push('/')
     }
   }

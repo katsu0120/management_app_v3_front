@@ -31,12 +31,12 @@ class MyInject {
   }
 
   // プロジェクトリンク
-  projectLinkTo (id, name = 'project-id-ProjectDetails') {
+  projectLinkTo (id, name = 'PersonalProject-id-ProjectDetails') {
     return { name, params: { id } }
   }
 
   // 完了したプロジェクトリンク
-  completedProjectLinkTo (id, name = 'CompletedProject-id-CompletedProjectDetails') {
+  completedProjectLinkTo (id, name = 'PersonalCompletedProject-id-CompletedProjectDetails') {
     return { name, params: { id } }
   }
 
