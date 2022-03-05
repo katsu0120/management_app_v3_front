@@ -17,6 +17,7 @@
     />
 
     <v-main>
+      <app-toaster />
       <nuxt />
     </v-main>
   </v-app>

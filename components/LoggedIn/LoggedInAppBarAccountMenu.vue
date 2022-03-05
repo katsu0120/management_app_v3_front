@@ -66,7 +66,7 @@ export default {
     return {
       menus: [
         { name: 'AccountDetails-mypage', icon: 'mdi-account' },
-        { name: 'projects', icon: 'mdi-note-text' },
+        { name: 'PersonalProjects', icon: 'mdi-note-text' },
         { name: 'AccountDetails-settings', icon: 'mdi-cog' },
         { name: 'logout', icon: 'mdi-logout-variant', divider: true }
       ]

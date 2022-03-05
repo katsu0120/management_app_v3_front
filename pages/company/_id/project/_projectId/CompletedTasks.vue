@@ -126,16 +126,16 @@ export default {
       undoTaskDialog: false,
       deleteDialog: false,
       // params一覧---------------------------------------------------------
-      undoTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: false }, company: { id: '' } },
+      undoTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '', updater: '', completed: false }, company: { id: '' } },
       deleteTaskParams: { project: { id: '' }, task: { id: '', title: '', content: '' }, company: { id: '' } },
       projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
-        { text: '状態', width: 50, value: 'completed', sortable: false },
-        { text: '作成日', width: 100, value: 'created_at', sortable: false },
+        { text: '最終更新者', width: 100, value: 'updater', sortable: false },
         { text: '完了日', width: 100, value: 'updated_at', sortable: false },
+        { text: '作成日', width: 100, value: 'created_at', sortable: false },
         { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
       ]
     }
@@ -186,6 +186,10 @@ export default {
         }
       })
       return taskList
+    },
+    currentUser () {
+      const currentUser = this.$store.state.user.current
+      return currentUser
     }
   },
   methods: {
@@ -200,7 +204,6 @@ export default {
         .catch(error => this.failureUpdate(error))
     },
     successUpdate (response) {
-      console.log(response)
     },
     failureUpdate (error) {
       console.log(error)
@@ -211,6 +214,7 @@ export default {
       this.undoTaskParams.task.id = item.id
       this.undoTaskParams.task.title = item.title
       this.undoTaskParams.task.content = item.content
+      this.undoTaskParams.task.updater = this.currentUser.name
       this.undoTaskDialog = true
     },
     async undoTask () {

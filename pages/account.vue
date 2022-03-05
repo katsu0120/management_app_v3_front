@@ -7,8 +7,7 @@
 <script>
 export default {
   name: 'PagesAccount',
-  layout: 'account',
-  // middleware: ['authentication'],
+  layout: 'AccountDetails',
   // falseを返すページのアクセスを制限する
   validate ({ route }) {
     return route.name !== 'account'

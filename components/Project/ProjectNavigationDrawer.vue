@@ -61,10 +61,10 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
-        { name: 'projects', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-ProjectDetails', icon: 'mdi-note-search-outline' },
-        { name: 'project-id-CompletedTasks', icon: 'mdi-checkbox-marked-circle' },
-        { name: 'CompletedPersonalProjects', icon: 'mdi-calendar-check' }
+        { name: 'PersonalProjects', icon: 'mdi-note-text' },
+        { name: 'PersonalProject-id-ProjectDetails', icon: 'mdi-note-search-outline' },
+        { name: 'PersonalProject-id-CompletedTasks', icon: 'mdi-checkbox-marked-circle' },
+        { name: 'PersonalCompletedProjects', icon: 'mdi-calendar-check' }
       ]
     }
   },

@@ -357,8 +357,8 @@ export default {
       await this.$axios.$get('/api/v1/projects')
         .then(projects => this.$store.dispatch('getProjectList', projects))
     },
-    failureUpdate (response) {
-      console.log(response)
+    failureUpdate (error) {
+      console.log(error)
     },
     async createTask () {
       this.params.project.id = this.currentProject.id
@@ -476,7 +476,7 @@ export default {
       })
       this.$store.dispatch('getProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/projects')
+      this.$router.push('/PersonalProjects')
     },
     failureProjectComplete (error) {
       console.log(error)

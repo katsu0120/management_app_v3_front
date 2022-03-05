@@ -5,6 +5,7 @@
       <v-card>
         <v-row
           justify="center"
+          class="mt-2"
         >
           <v-col
             cols="12"
@@ -12,7 +13,9 @@
             :md="container.md"
           >
             <v-row justify="center">
-              <v-col>
+              <v-col
+                class="pb-0"
+              >
                 <v-text-field
                   v-model="currentCompany.name"
                   label="Company Name"
@@ -23,7 +26,7 @@
             </v-row>
             <v-row
               justify="end"
-              class="pb-5 mt-0 mr-1"
+              class="pb-0 mt-0 mr-1"
             >
               <v-btn
                 color="primary"
@@ -31,6 +34,13 @@
               >
                 ユーザー追加
               </v-btn>
+            </v-row>
+            <v-row justify="start">
+              <v-card-subtitle
+                class="pt-0"
+              >
+                オーナー【{{ ownerUser.name }}】
+              </v-card-subtitle>
             </v-row>
             <v-divider />
 
@@ -103,14 +113,16 @@
         >
           <v-app-bar
             flat
-            color="rgba(0, 0, 0, 0)"
+            color="white"
           >
             <v-btn
               icon
               large
               @click="findUserDialog = false"
             >
-              <v-icon>mdi-arrow-left</v-icon>
+              <v-icon>
+                mdi-arrow-left
+              </v-icon>
             </v-btn>
             <v-toolbar-title>
               検索
@@ -121,19 +133,26 @@
             <v-row
               class="pt-7 pl-5 pr-5"
             >
-              <v-col>
+              <v-col
+                cols="12"
+                xs="12"
+                sm="12"
+                md="12"
+                lg="12"
+                xl="12"
+              >
                 <v-text-field
                   v-model="findName"
                   outlined
                   rounded
-                  label="検索ワードを入力"
+                  label="ユーザー名を入力"
                   append-outer-icon="mdi-magnify"
                   @click:append-outer="findUser"
                 />
               </v-col>
             </v-row>
             <v-divider />
-            <!-- ここから下が、新しく定義する検索結果 -->
+            <!-- ここから下が検索結果のlengthがあると表示する ---------------------------------------------------------------------------->
             <v-container
               v-if="users.length > 0"
             >
@@ -209,7 +228,7 @@
                   label="DeleteKey"
                   placeholder="Deletekey"
                   autofocus
-                  max-width="100"
+                  max-width="90"
                   class="my-0 text-h6"
                   cols="3"
                 />
@@ -256,7 +275,7 @@ export default {
       findUserDialog: false,
       deleteComfirmDialog: false,
       container: {
-        sm: 10,
+        sm: 9,
         md: 20
       },
       // params一覧---------------------------------------------------
@@ -313,6 +332,12 @@ export default {
     async findUser () {
       this.users = []
       const url = 'api/v1/finders'
+      if (this.findName === '') {
+        const color = 'error'
+        const msg = '検索したいユーザー名を入力して下さい😄'
+        const timeout = '3000'
+        return this.$store.dispatch('getToast', { msg, color, timeout })
+      }
       await this.$axios.get(url, { params: { findName: this.findName } })
         .then((res) => {
           // 参加しているユーザーを取得
@@ -407,7 +432,10 @@ export default {
       }
     },
     succesNameChenge (response) {
-      console.log(response)
+      const color = 'success'
+      const msg = 'カンパニー名の変更が完了しました😄'
+      const timeout = '4000'
+      this.$store.dispatch('getToast', { msg, color, timeout })
     },
     failureNameChenge (error) {
       console.log(error)
@@ -436,8 +464,13 @@ export default {
       }
     },
     successDelete (response) {
-      console.log(response)
-      this.$router.push('/')
+      const color = 'error'
+      const msg = 'Companyと、それに付随する全てのProjects,Tasksの削除が完了しました😀'
+      const timeout = '3000'
+      this.$store.dispatch('getToast', { msg, color, timeout })
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 3000)
     },
     failureDelete (error) {
       console.log(error)

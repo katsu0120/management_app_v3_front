@@ -32,7 +32,7 @@
           >
             <v-card-actions>
               <v-text-field
-                v-model="userinformation.email"
+                v-model="userInformation.newEmail"
                 label="email"
                 :rules="emailRules"
                 placeholder="メールアドレス"
@@ -42,9 +42,9 @@
                 color="primary"
                 class="ml-2 mb-4"
                 :loading="loading"
-                @click="UserMailEdit"
+                @click="userMailUpdate"
               >
-                更新
+                変更
               </v-btn>
             </v-card-actions>
           </v-col>
@@ -54,37 +54,81 @@
       <v-divider
         class="mx-4"
       />
-      <v-form>
+      <v-form
+        v-model="isValid"
+        @submit.prevent="passwordUpdate"
+      >
         <v-card-text>
           <v-card-subtitle class=" mb-0 text-subtitle-1">
             <v-icon class="mb-1">
               mdi-lock-outline
             </v-icon>
-            パスワード
+            パスワード変更
           </v-card-subtitle>
           <v-row>
             <v-col
               cols="12"
-              xs="12"
-              sm="10"
-              md="10"
-              lg="10"
-              xl="10"
+              xs="10"
+              sm="9"
+              md="9"
+              lg="9"
+              xl="9"
+              class="py-0"
             >
-              <v-card-actions>
-                <user-form-password
-                  set-validation
-                />
-                <v-btn
-                  color="primary"
-                  class="ml-2 mb-4"
-                  :loading="loading"
-                  @click="UserPasswordEdit"
+              <v-card-actions
+                class="pb-0 pl-0"
+              >
+                <v-col
+                  class="py-0"
                 >
-                  更新
-                </v-btn>
+                  <user-form-password
+                    :password.sync="params.user.password"
+                    set-validation
+                  />
+                </v-col>
               </v-card-actions>
             </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+              xs="12"
+              sm="9"
+              md="9"
+              lg="9"
+              xl="9"
+              class="py-0"
+            >
+              <v-card-actions
+                class="py-0 pl-0"
+              >
+                <v-col
+                  class="py-0 pt-0"
+                >
+                  <user-form-reset-password
+                    :password.sync="params.user.new_password"
+                    set-validation
+                  />
+                </v-col>
+              </v-card-actions>
+            </v-col>
+          </v-row>
+          <v-divider
+            class="mx-4 mt-4"
+          />
+          <v-row justify="center">
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                type="submit"
+                :disabled="!isValid || loading"
+                class="ml-2 mt-6 mb-2"
+                :loading="loading"
+                @click="passwordAuthenticate"
+              >
+                変更
+              </v-btn>
+            </v-card-actions>
           </v-row>
         </v-card-text>
       </v-form>
@@ -104,55 +148,89 @@ export default {
       show: false,
       isValid: false,
       loading: false,
-      // params: { user: { id: '', name: '', email: '', user_profile: '' } },
+      emailUpdateparams: { user: { id: '', old_email: '', new_email: '' } },
       emailRules: [
         // 入力必須
         v => !!v || '',
         // 書式チェック(rails側でしっかりしたcheckしているので簡易的)
         v => /.+@.+\..+/.test(v) || ''
-      ]
+      ],
+      params: { user: { password: '', new_password: '' } }
     }
   },
   computed: {
-    userinformation () {
+    userInformation () {
       const id = this.$store.state.user.information.data.id
       const name = this.$store.state.user.information.data.name
-      const email = this.$store.state.user.information.data.email
-      const UserProfile = this.$store.state.user.information.data.user_profile
-      return { id, name, email, UserProfile }
+      const oldEmail = this.$store.state.user.information.data.email
+      const newEmail = this.$store.state.user.information.data.email
+      const userProfile = this.$store.state.user.information.data.user_profile
+      return { id, name, oldEmail, newEmail, userProfile }
     }
   },
   methods: {
-    async UserMailEdit () {
+    async userMailUpdate () {
       const sure = confirm('emailを変更します。よろしいですか')
+      this.emailUpdateparams.user.id = this.userInformation.id
+      this.emailUpdateparams.user.old_email = this.userInformation.oldEmail
+      this.emailUpdateparams.user.new_email = this.userInformation.newEmail
       if (sure) {
         this.loading = true
-        await this.$axios.$put('/api/v1/users', this.userinformation)
-          .then(response => this.emailEditComplete(response))
-          .catch(error => this.emailEditError(error))
+        await this.$axios.$post('/api/v1/email_updates', this.emailUpdateparams)
+          .then(response => this.emailUpdateComplete(response))
+          .catch(error => this.emailUpdateError(error))
         this.loading = false
       }
     },
-    emailEditComplete (response) {
-      console.log(response)
+    emailUpdateComplete (response) {
+      const color = '#2979FF'
+      const msg = '変更アドレスに認証メールを送信しました。10分以内に変更のご確認をお願い致します'
+      this.$store.dispatch('getToast', { msg, color })
     },
-    emailEditError (error) {
+    emailUpdateError (error) {
       console.log(error)
     },
-    async UserPasswordEdit () {
+    async passwordAuthenticate () {
       this.loading = true
-      await this.$axios.$put('/api/v1/users', this.params)
-        .then(response => this.profileEditComplete(response))
-        .catch(error => this.profileError(error))
+      await this.$axios.$post('/api/v1/password_updates/password_authentication', this.params)
+        .then(response => this.authenticateComplete(response))
+        .catch(error => this.authenticateFailure(error))
       this.loading = false
     },
-    profileEditComplete (response) {
-      alert('プロフィールの更新が完了しました')
-      location.reload('ユーザー名の更新が完了しました')
+    authenticateComplete (response) {
+      if (!response.status) {
+        const msg = response.msg
+        const color = response.color
+        return this.$store.dispatch('getToast', { msg, color })
+      } else {
+        this.PasswordUpdate()
+      }
     },
-    profileEditError (error) {
+    authenticateFailure (error) {
+      console.log(error)
+    },
+    async PasswordUpdate () {
+      this.loading = true
+      await this.$axios.$put('/api/v1/password_updates', this.params)
+        .then(response => this.passwordEditComplete(response))
+        .catch(error => this.passwordEditError(error))
+      this.loading = false
+    },
+    passwordEditComplete (response) {
+      const msg = response.msg
+      const color = response.color
+      this.$store.dispatch('getToast', { msg, color })
+    },
+    passwordEditError (error) {
       console.log(error)
     }
   }
 }
 </script>
+
+<style lang="scss">
+#passbtn {
+  margin-right: 70px;
+  padding-bottom: 60px;
+}
+</style>

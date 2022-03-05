@@ -62,12 +62,18 @@ export default {
       return this.$store.dispatch('getToast', { msg, color })
     },
     successfullPasswordReset (response) {
-      alert('パスワードの変更が完了しました')
-      this.$router.push('/')
+      const color = response.color
+      const msg = response.msg
+      this.$store.dispatch('getToast', { msg, color })
+      this.$router.push('/AccountDetails/settings')
+      setTimeout(() => {
+        this.$router.push('/')
+      }, 3000)
     },
-    // emailユーザーが見つからない場合の処理
     failedPasswordReset (error) {
-      console.log('failedPasswordReset', error.response)
+      const color = error.response.color
+      const msg = error.response.msg
+      this.$store.dispatch('getToast', { msg, color })
     }
   }
 }

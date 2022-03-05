@@ -154,6 +154,7 @@ export default {
         { text: 'ID', width: 50, value: 'id', sortable: false },
         { text: '会社ID', width: 100, value: 'company_id', sortable: false },
         { text: 'プロジェクト名', value: 'title', sortable: false },
+        { text: '更新者', width: 100, value: 'updater', sortable: false },
         { text: '作成日', width: 150, value: 'created_at', sortable: false },
         { text: '完了日', width: 150, value: 'updated_at', sortable: false }
       ]
@@ -185,27 +186,6 @@ export default {
     currentUser () {
       const currentUser = this.$store.state.user.current
       return currentUser
-    }
-  },
-  methods: {
-    async create () {
-      this.params.company.id = this.currentCompany.id
-      this.params.project.user_id = this.currentUser.id
-      this.loading = true
-      await this.$axios.$post('/api/v1/company_projects', this.params)
-        .then(response => this.success(response))
-        .catch(error => this.createFailure(error))
-      this.loading = false
-      this.newProjectDialog = false
-    },
-    success (response) {
-      const companyId = response.company_id
-      const projectId = response.id
-      this.$router.push({ path: `/company/${companyId}/project/${projectId}/CompletedCompanyProjectDetails` })
-      alert('新規作成されました')
-    },
-    createFailure (error) {
-      console.log(error)
     }
   }
 }

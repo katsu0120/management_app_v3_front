@@ -29,14 +29,14 @@
           >
             <v-card-actions>
               <v-text-field
-                v-model="currentProject.title"
+                v-model="updateCurrentProject.title"
                 label="CompanyProjectTitle"
                 placeholder="projectのタイトル"
                 max-width="100"
                 class="mb-0 text-h6"
                 height="30"
                 autofocus
-                @blur="editProject"
+                @blur="editProjectTitle"
               />
             </v-card-actions>
           </v-col>
@@ -62,7 +62,7 @@
               class=" pb-0"
             >
               <v-textarea
-                v-model="currentProject.content"
+                v-model="updateCurrentProject.content"
                 label="content"
                 auto-grow
                 placeholder="プロジェクト詳細"
@@ -70,7 +70,7 @@
                 rows="8"
                 class=" mb-0"
                 autofocus
-                @blur="editProject"
+                @blur="editProjectContent"
               />
             </v-card-actions>
           </v-col>
@@ -304,17 +304,17 @@ export default {
       taskCompleteDialog: false,
       projectCompleteDialog: false,
       // params一覧---------------------------------------------------------
-      projectEditParams: { project: { id: '', title: '', content: '' }, company: { id: '' } },
+      projectEditParams: { project: { id: '', title: '', content: '', updater: '' }, company: { id: '' } },
       projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
-      projectCompleteParams: { project: { id: '', title: '', content: '', completed: true }, company: { id: '' } },
-      taskCreateParams: { company: { id: '' }, project: { id: '' }, task: { title: '', content: '' } },
-      taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '' }, company: { id: '' } },
+      projectCompleteParams: { project: { id: '', title: '', content: '', updater: '', completed: true }, company: { id: '' } },
+      taskCreateParams: { company: { id: '' }, project: { id: '' }, task: { title: '', content: '', updater: '' } },
+      taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '', updater: '' }, company: { id: '' } },
       taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true }, company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
         { text: '内容', width: 250, value: 'content', sortable: false },
-        { text: '状態', width: 50, value: 'completed', sortable: false },
+        { text: '最終更新者', width: 100, value: 'updater', sortable: false },
         { text: '作成日', width: 100, value: 'created_at', sortable: false },
         { text: '更新日', width: 100, value: 'updated_at', sortable: false },
         { text: 'Actions', width: 50, class: 'pr-1', value: 'actions', sortable: false }
@@ -326,7 +326,15 @@ export default {
       const company = this.$store.state.company.current
       return company
     },
+    // 更新前のproject内容
     currentProject () {
+      const id = this.$store.state.companyProject.current.id
+      const title = this.$store.state.companyProject.current.title
+      const content = this.$store.state.companyProject.current.content
+      return { id, title, content }
+    },
+    // 更新後のproject内容
+    updateCurrentProject () {
       const id = this.$store.state.companyProject.current.id
       const title = this.$store.state.companyProject.current.title
       const content = this.$store.state.companyProject.current.content
@@ -367,22 +375,44 @@ export default {
         }
       })
       return taskList
+    },
+    currentUser () {
+      const currentUser = this.$store.state.user.current
+      return currentUser
     }
   },
   methods: {
-    async editProject () {
-      this.projectEditParams.company.id = this.currentCompany.id
-      this.projectEditParams.project.title = this.currentProject.title
-      this.projectEditParams.project.content = this.currentProject.content
-      this.projectEditParams.project.id = this.currentProject.id
-      this.loading = true
-      await this.$axios.$put('/api/v1/company_projects', this.projectEditParams)
-        .then(response => this.successUpdate(response))
-        .catch(error => this.failureUpdate(error))
+    async editProjectTitle () {
+      if (this.updateCurrentProject.title !== this.currentProject.title) {
+        this.loading = true
+        this.projectEditParams.company.id = this.currentCompany.id
+        this.projectEditParams.project.title = this.updateCurrentProject.title
+        this.projectEditParams.project.content = this.updateCurrentProject.content
+        this.projectEditParams.project.id = this.currentProject.id
+        this.projectEditParams.project.updater = this.currentUser.name
+        this.loading = true
+        await this.$axios.$put('/api/v1/company_projects', this.projectEditParams)
+          .then(response => this.successUpdate(response))
+          .catch(error => this.failureUpdate(error))
+      }
+      this.loading = false
+    },
+    async editProjectContent () {
+      if (this.updateCurrentProject.content !== this.currentProject.content) {
+        this.loading = true
+        this.projectEditParams.company.id = this.currentCompany.id
+        this.projectEditParams.project.title = this.updateCurrentProject.title
+        this.projectEditParams.project.content = this.updateCurrentProject.content
+        this.projectEditParams.project.id = this.currentProject.id
+        this.projectEditParams.project.updater = this.currentUser.name
+        this.loading = true
+        await this.$axios.$put('/api/v1/company_projects', this.projectEditParams)
+          .then(response => this.successUpdate(response))
+          .catch(error => this.failureUpdate(error))
+      }
       this.loading = false
     },
     successUpdate (response) {
-      console.log(response)
     },
     failureUpdate (error) {
       console.log(error)
@@ -390,6 +420,7 @@ export default {
     async createTask () {
       this.taskCreateParams.company.id = this.currentCompany.id
       this.taskCreateParams.project.id = this.currentProject.id
+      this.taskCreateParams.task.updater = this.currentUser.name
       this.loading = true
       await this.$axios.$post('/api/v1/company_tasks', this.taskCreateParams)
         .then(response => this.setState(response))
@@ -425,6 +456,7 @@ export default {
       this.taskEditParams.task.id = item.id
       this.taskEditParams.task.title = item.title
       this.taskEditParams.task.content = item.content
+      this.taskEditParams.task.updater = this.currentUser.name
       this.taskEditDialog = true
     },
     async editTask () {
@@ -457,6 +489,7 @@ export default {
       this.taskCompleteParams.task.id = item.id
       this.taskCompleteParams.task.title = item.title
       this.taskCompleteParams.task.content = item.content
+      this.taskCompleteParams.task.updater = this.currentUser.name
       this.taskCompleteDialog = true
     },
     async taskComplete () {
@@ -487,6 +520,7 @@ export default {
       this.projectCompleteParams.project.id = this.currentProject.id
       this.projectCompleteParams.project.title = this.currentProject.title
       this.projectCompleteParams.project.content = this.currentProject.content
+      this.projectCompleteParams.project.updater = this.currentUser.name
       this.projectCompleteDialog = true
     },
     projectComplete () {

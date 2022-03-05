@@ -44,7 +44,6 @@
                 max-width="100"
                 class="mb-0 text-h6"
                 height="30"
-                @blur="notEditProject"
               />
             </v-card-actions>
           </v-col>
@@ -78,7 +77,6 @@
                 outlined
                 rows="8"
                 class=" mb-0"
-                @blur="notEditProject"
               />
             </v-card-actions>
           </v-col>
@@ -236,9 +234,6 @@ export default {
     }
   },
   methods: {
-    notEditProject () {
-      console.log('readOnly')
-    },
     // プロジェクトをupdateした際にupdate_atを更新するメソッド
     async projectUpdatedAt () {
       this.editProjectParams.id = this.currentProject.id
@@ -253,8 +248,8 @@ export default {
       await this.$axios.$get('/api/v1/projects')
         .then(projects => this.$store.dispatch('getProjectList', projects))
     },
-    failureUpdate (response) {
-      console.log(response)
+    failureUpdate (error) {
+      console.log(error)
     },
     incompleteProjectDialogOpen () {
       this.incompleteProjectParams.id = this.currentProject.id
@@ -281,7 +276,7 @@ export default {
       })
       this.$store.dispatch('getProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/CompletedPersonalProjects')
+      this.$router.push('/PersonalCompletedProjects')
     },
     failureIncompleteProject (error) {
       console.log(error)
@@ -310,7 +305,7 @@ export default {
         }
       })
       this.$store.dispatch('getProjectList', projectList)
-      this.$router.push('/CompletedPersonalProjects')
+      this.$router.push('/PersonalCompletedProjects')
     },
     deleteFailure (error) {
       console.log(error)
