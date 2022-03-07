@@ -310,6 +310,8 @@ export default {
       taskCreateParams: { company: { id: '' }, project: { id: '' }, task: { title: '', content: '', updater: '' } },
       taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '', updater: '' }, company: { id: '' } },
       taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true }, company: { id: '' } },
+      // -successUpdateParams-----------------------------------------------------
+      successUpdateParams: { company: { id: '' } },
       tableHeaders: [
         { text: 'ID', width: 30, value: 'id', sortable: false },
         { text: 'Task名', width: 120, value: 'title', sortable: false },
@@ -384,11 +386,10 @@ export default {
   methods: {
     async editProjectTitle () {
       if (this.updateCurrentProject.title !== this.currentProject.title) {
-        this.loading = true
         this.projectEditParams.company.id = this.currentCompany.id
+        this.projectEditParams.project.id = this.currentProject.id
         this.projectEditParams.project.title = this.updateCurrentProject.title
         this.projectEditParams.project.content = this.updateCurrentProject.content
-        this.projectEditParams.project.id = this.currentProject.id
         this.projectEditParams.project.updater = this.currentUser.name
         this.loading = true
         await this.$axios.$put('/api/v1/company_projects', this.projectEditParams)
@@ -399,11 +400,10 @@ export default {
     },
     async editProjectContent () {
       if (this.updateCurrentProject.content !== this.currentProject.content) {
-        this.loading = true
         this.projectEditParams.company.id = this.currentCompany.id
+        this.projectEditParams.project.id = this.currentProject.id
         this.projectEditParams.project.title = this.updateCurrentProject.title
         this.projectEditParams.project.content = this.updateCurrentProject.content
-        this.projectEditParams.project.id = this.currentProject.id
         this.projectEditParams.project.updater = this.currentUser.name
         this.loading = true
         await this.$axios.$put('/api/v1/company_projects', this.projectEditParams)
@@ -412,7 +412,12 @@ export default {
       }
       this.loading = false
     },
-    successUpdate (response) {
+    async successUpdate (response) {
+      // company_projectsListを新たに取得して
+      await this.$axios.$get('/api/v1/company_projects', { params: { id: this.currentCompany.id } })
+        .then(projects => this.$store.dispatch('getCompanyProjectList', projects))
+        // current_projectを取得してcomputedを更新し、updateCurrentProjectとcurrentProjectの差異を無くす、それによりblurの無駄なリクエストがなくなる。
+      this.$store.dispatch('getCompanyProjectCurrent', { id: this.currentCompany.id, projectId: this.currentProject.id })
     },
     failureUpdate (error) {
       console.log(error)

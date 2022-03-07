@@ -61,9 +61,9 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
-        { name: 'PersonalCompletedProject-id-CompletedProjectDetails', icon: 'mdi-note-search-outline' },
-        { name: 'PersonalCompletedProject-id-CompletedTasks', icon: 'mdi-calendar-check' },
-        { name: 'PersonalCompletedProjects', icon: 'mdi-checkbox-marked' }
+        { name: 'CompletedProject-id-CompletedProjectDetails', icon: 'mdi-note-search-outline' },
+        { name: 'CompletedProject-id-CompletedTasks', icon: 'mdi-calendar-check' },
+        { name: 'CompletedProjects', icon: 'mdi-checkbox-marked' }
       ]
     }
   },

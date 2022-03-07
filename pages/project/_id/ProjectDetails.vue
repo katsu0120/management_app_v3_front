@@ -29,14 +29,14 @@
           >
             <v-card-actions>
               <v-text-field
-                v-model="currentProject.title"
+                v-model="updateCurrentProject.title"
                 label="ProjectTitle"
                 placeholder="projectのタイトル"
                 max-width="100"
                 class="mb-0 text-h6"
                 height="30"
                 autofocus
-                @blur="editProject"
+                @blur="editProjectTitle"
               />
             </v-card-actions>
           </v-col>
@@ -62,7 +62,7 @@
               class=" pb-0"
             >
               <v-textarea
-                v-model="currentProject.content"
+                v-model="updateCurrentProject.content"
                 label="content"
                 auto-grow
                 placeholder="プロジェクト詳細"
@@ -70,7 +70,7 @@
                 rows="8"
                 class=" mb-0"
                 autofocus
-                @blur="editProject"
+                @blur="editProjectContent"
               />
             </v-card-actions>
           </v-col>
@@ -305,7 +305,8 @@ export default {
       projectCompleteDialog: false,
       // params一覧---------------------------------------------------------
       params: { project: { id: '' }, task: { title: '', content: '' } },
-      projectEditParams: { id: '', title: '', content: '', updated_at: '' },
+      projectEditParams: { id: '', title: '', content: '' },
+      projectApdateAtParams: { id: '', title: '', content: '', updated_at: '' },
       projectCompleteParams: { id: '', title: '', content: '', completed: true },
       taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '' } },
       taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true } },
@@ -321,6 +322,12 @@ export default {
   },
   computed: {
     currentProject () {
+      const id = this.$store.state.project.current.id
+      const title = this.$store.state.project.current.title
+      const content = this.$store.state.project.current.content
+      return { id, title, content }
+    },
+    updateCurrentProject () {
       const id = this.$store.state.project.current.id
       const title = this.$store.state.project.current.title
       const content = this.$store.state.project.current.content
@@ -346,19 +353,38 @@ export default {
     }
   },
   methods: {
-    async editProject () {
-      this.loading = true
-      await this.$axios.$put('/api/v1/projects', this.currentProject)
-        .then(response => this.successUpdate(response))
-        .catch(error => this.failureUpdate(error))
+    async editProjectTitle () {
+      if (this.updateCurrentProject.title !== this.currentProject.title) {
+        this.projectEditParams.id = this.updateCurrentProject.id
+        this.projectEditParams.title = this.updateCurrentProject.title
+        this.projectEditParams.content = this.updateCurrentProject.content
+        this.loading = true
+        await this.$axios.$put('/api/v1/projects', this.projectEditParams)
+          .then(response => this.successUpdate(response))
+          .catch(error => this.failureUpdate(error))
+      }
       this.loading = false
     },
     async successUpdate (response) {
+      //  computedのcurrentProjectを取得し直すことで更新。これにより無駄なloadingがなくなる
       await this.$axios.$get('/api/v1/projects')
         .then(projects => this.$store.dispatch('getProjectList', projects))
+      this.$store.dispatch('getCurrentProject', { id: this.updateCurrentProject.id })
     },
     failureUpdate (error) {
       console.log(error)
+    },
+    async editProjectContent () {
+      if (this.updateCurrentProject.content !== this.currentProject.content) {
+        this.projectEditParams.id = this.updateCurrentProject.id
+        this.projectEditParams.title = this.updateCurrentProject.title
+        this.projectEditParams.content = this.updateCurrentProject.content
+        this.loading = true
+        await this.$axios.$put('/api/v1/projects', this.projectEditParams)
+          .then(response => this.successUpdate(response))
+          .catch(error => this.failureUpdate(error))
+      }
+      this.loading = false
     },
     async createTask () {
       this.params.project.id = this.currentProject.id
@@ -382,11 +408,11 @@ export default {
     },
     // プロジェクトをupdateした際にupdate_atを更新するメソッド
     async projectUpdatedAt () {
-      this.projectEditParams.id = this.currentProject.id
-      this.projectEditParams.title = this.currentProject.title
-      this.projectEditParams.content = this.currentProject.content
-      this.projectEditParams.updated_at = new Date()
-      await this.$axios.$put('/api/v1/projects', this.projectEditParams)
+      this.projectApdateAtParams.id = this.currentProject.id
+      this.projectApdateAtParams.title = this.currentProject.title
+      this.projectApdateAtParams.content = this.currentProject.content
+      this.projectApdateAtParams.updated_at = new Date()
+      await this.$axios.$put('/api/v1/projects', this.projectApdateAtParams)
         .then(response => this.successUpdate(response))
         .catch(error => this.failureUpdate(error))
     },
@@ -476,7 +502,7 @@ export default {
       })
       this.$store.dispatch('getProjectList', projectList)
       this.projectUpdatedAt()
-      this.$router.push('/PersonalProjects')
+      this.$router.push('/projects')
     },
     failureProjectComplete (error) {
       console.log(error)

@@ -331,25 +331,32 @@ export default {
     // ユーザー検索メソッド--------------------------------------------------
     async findUser () {
       this.users = []
-      const url = 'api/v1/finders'
       if (this.findName === '') {
         const color = 'error'
         const msg = '検索したいユーザー名を入力して下さい😄'
         const timeout = '3000'
         return this.$store.dispatch('getToast', { msg, color, timeout })
       }
-      await this.$axios.get(url, { params: { findName: this.findName } })
-        .then((res) => {
+      await this.$axios.get('api/v1/finders', { params: { findName: this.findName } })
+        .then((response) => {
+          if (response.data.length <= 0) {
+            const color = 'error'
+            const msg = '検索したユーザーは存在しません😰'
+            const timeout = '3000'
+            return this.$store.dispatch('getToast', { msg, color, timeout })
+          }
           // 参加しているユーザーを取得
           const usersList = []
           this.companyUsers.forEach((users) => {
             usersList.push(users.id)
           })
-          // responeseをfotEachでループする際に参加userかどうかincludesメソッドで確認して、参加していないuserだけをpushする。
-          const search = res.data
+          // responeseをfotEachでループする際に参加userかどうかincludesメソッドで確認して、参加していないuserだけをpush(検索結果に反映)する。
+          const search = response.data
           search.forEach((users) => {
             if (!usersList.includes(users.id)) {
               this.users.push(users)
+            } else {
+              console.log('いません')
             }
           })
         })
