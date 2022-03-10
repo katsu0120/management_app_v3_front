@@ -124,7 +124,7 @@
 import dashboardImg from '~/assets/images/logged-in/Data storage_Monochromatic.png'
 export default {
   name: 'PagesProjects',
-  layout: 'project',
+  layout: 'completed-project',
   middleware: ['get-project-list'],
   data () {
     return {

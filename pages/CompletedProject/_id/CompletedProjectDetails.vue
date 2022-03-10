@@ -188,7 +188,7 @@
 <script>
 export default {
   name: 'PagesProjectDetails',
-  middleware: ['get-project-task'],
+  middleware: ['get-project-current', 'get-project-task'],
   data () {
     return {
       loading: false,

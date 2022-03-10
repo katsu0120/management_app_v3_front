@@ -356,7 +356,10 @@ export default {
             if (!usersList.includes(users.id)) {
               this.users.push(users)
             } else {
-              console.log('いません')
+              const color = 'error'
+              const msg = '検索したユーザーは存在しません😰'
+              const timeout = '3000'
+              return this.$store.dispatch('getToast', { msg, color, timeout })
             }
           })
         })

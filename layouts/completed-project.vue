@@ -26,7 +26,7 @@
 <script>
 export default {
   name: 'LayoutsCompletedProject',
-  middleware: ['authentication', 'get-project-list', 'get-project-current'],
+  middleware: ['authentication', 'get-project-list'],
   data () {
     return {
       drawer: null
