@@ -84,7 +84,7 @@ export default {
       imgHeight: 500,
       menus: [
         { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理サイトです' },
-        { title: 'products', subtitle: '他にはない優れた機能の数々' },
+        { title: 'products', subtitle: '直感でわかりやすい操作' },
         { title: 'company', subtitle: '作成者の情報' }
       ]
     }

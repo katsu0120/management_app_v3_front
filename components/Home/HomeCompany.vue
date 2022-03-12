@@ -57,8 +57,7 @@ export default {
       infomations: [
         { icon: 'mdi-account', text: 'カツ' },
         { icon: 'mdi-twitter', link: companyUrl },
-        { icon: 'mdi-flag', text: '2021年10月に作成開始' },
-        { icon: 'mdi-calendar-text-outline ', text: '完全独学で学習し当サイトを作成しました。' }
+        { icon: 'mdi-calendar-text-outline ', text: '独学で学習し当サイトを作成しました。' }
       ]
     }
   }
