@@ -30,6 +30,7 @@
       </v-btn>
     </v-toolbar-items>
 
+    <before-login-app-bar-how-to-use-button />
     <before-login-app-bar-signup-button />
     <before-login-app-bar-login-button />
 

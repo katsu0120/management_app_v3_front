@@ -5,13 +5,13 @@
     color="white"
   >
     <nuxt-link
-      to="/"
+      :to="'/'"
       class="text-decoration-none"
     >
       <app-logo />
     </nuxt-link>
     <nuxt-link
-      to="/"
+      :to="'/'"
       class="text-decoration-none"
     >
       <app-title
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 export default {
   data ({ $store }) {
     return {

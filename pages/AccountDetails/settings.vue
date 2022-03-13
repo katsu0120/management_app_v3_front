@@ -37,11 +37,12 @@
                 :rules="emailRules"
                 placeholder="メールアドレス"
                 autofocus
+                @input="watchEmailBtn"
               />
               <v-btn
                 color="primary"
                 class="ml-2 mb-4"
-                :loading="loading"
+                :disabled="!isValidEmailBtn || loading"
                 @click="userMailUpdate"
               >
                 変更
@@ -147,6 +148,7 @@ export default {
     return {
       show: false,
       isValid: false,
+      isValidEmailBtn: false,
       loading: false,
       emailUpdateparams: { user: { id: '', old_email: '', new_email: '' } },
       emailRules: [
@@ -223,6 +225,13 @@ export default {
     },
     passwordEditError (error) {
       console.log(error)
+    },
+    watchEmailBtn () {
+      if (this.userInformation.oldEmail !== this.userInformation.newEmail) {
+        this.isValidEmailBtn = true
+      } else {
+        this.isValidEmailBtn = false
+      }
     }
   }
 }
