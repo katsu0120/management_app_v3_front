@@ -33,6 +33,18 @@
           </v-btn>
         </v-card-text>
       </v-form>
+      <v-card-text class="px-0 pt-1">
+        <v-btn
+          :disabled="isValid || loading"
+          :loading="loading"
+          block
+          class="white--text"
+          color="appblue"
+          @click="gestLogin"
+        >
+          ゲストでログインする
+        </v-btn>
+      </v-card-text>
     </template>
   </user-form-card>
 </template>
@@ -74,6 +86,18 @@ export default {
         return this.$store.dispatch('getToast', { msg })
       }
       return this.$my.apiErrorHandler(response)
+    },
+    async gestLogin () {
+      this.params.auth.email = 'gestuser2@example.com'
+      this.params.auth.password = 'password'
+      console.log(this.params)
+      this.loading = true
+      if (!this.isValid) {
+        await this.$axios.$post('/api/v1/auth_token', this.params)
+          .then(response => this.authSuccessful(response))
+          .catch(error => this.authFailure(error))
+      }
+      this.loading = false
     }
   }
 }
