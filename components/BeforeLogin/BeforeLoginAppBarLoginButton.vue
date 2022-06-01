@@ -2,7 +2,7 @@
   <v-btn
     text
     class="ml-2 font-weight-bold"
-    color="black"
+    color="white"
     to="/login"
   >
     {{ $my.pageTitle('login') }}

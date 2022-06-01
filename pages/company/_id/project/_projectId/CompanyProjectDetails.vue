@@ -308,7 +308,7 @@ export default {
       projectUpdatedAtParams: { project: { id: '', title: '', content: '', updated_at: '' }, company: { id: '' } },
       projectCompleteParams: { project: { id: '', title: '', content: '', updater: '', completed: true }, company: { id: '' } },
       taskCreateParams: { company: { id: '' }, project: { id: '' }, task: { title: '', content: '', updater: '' } },
-      taskEditParams: { project: { id: '' }, task: { id: '', title: '', content: '', updater: '' }, company: { id: '' } },
+      taskEditParams: { company: { id: '' }, project: { id: '' }, task: { id: '', title: '', content: '', updater: '' } },
       taskCompleteParams: { project: { id: '' }, task: { id: '', title: '', content: '', completed: true }, company: { id: '' } },
       // -successUpdateParams-----------------------------------------------------
       successUpdateParams: { company: { id: '' } },

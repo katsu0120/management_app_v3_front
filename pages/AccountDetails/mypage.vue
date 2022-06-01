@@ -161,10 +161,8 @@ export default {
     nameEditComplete (response) {
       const msg = response.msg
       const color = response.color
-      if (color === '#D50000') {
-        this.updateUserInformation.name = this.userinformation.name
-      }
       this.$store.dispatch('getToast', { msg, color })
+      // nameがダブってたら変更出来ないのでcomputedUpdateは元の名前に戻す。変更出来たら普通に変更してくれるメソッド
       this.computedUpdate()
     },
     nameEditError (error) {

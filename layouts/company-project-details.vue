@@ -6,6 +6,7 @@
         #navigation-toggle-button
       >
         <v-app-bar-nav-icon
+          color="white"
           @click="drawer = !drawer"
         />
       </template>

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     app
-    :dark="!isScrollPoint"
+    :dark="true"
     :height="homeAppBarHeight"
     :color="toolbarStyle.color"
     :elevation="toolbarStyle.elevation"
@@ -30,7 +30,6 @@
       </v-btn>
     </v-toolbar-items>
 
-    <before-login-app-bar-how-to-use-button />
     <before-login-app-bar-signup-button />
     <before-login-app-bar-login-button />
 
@@ -92,7 +91,7 @@ export default {
       return this.scrollY > (this.imgHeight - this.homeAppBarHeight)
     },
     toolbarStyle () {
-      const color = this.isScrollPoint ? 'white' : 'transparent'
+      const color = this.isScrollPoint ? 'grey darken-3' : 'grey darken-4'
       const elevation = this.isScrollPoint ? 4 : 0
       return { color, elevation }
     }

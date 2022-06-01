@@ -29,10 +29,5 @@
 <script>
 
 export default {
-  data ({ $store }) {
-    return {
-      homeAppBarHeight: $store.state.styles.homeAppBarHeight
-    }
-  }
 }
 </script>

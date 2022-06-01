@@ -190,6 +190,7 @@ import ExplanatoryImage8 from '~/assets/images/Explanatory/ExplanatoryImage(8).p
 export default {
   data () {
     return {
+      imgHeight: 500,
       images: {
         ExplanatoryImage1,
         ExplanatoryImage2,
@@ -201,7 +202,7 @@ export default {
         ExplanatoryImage8
       },
       menus: [
-        { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理サイトです' },
+        { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理プロfダクトです' },
         { title: 'products', subtitle: '直感でわかりやすい操作' },
         { title: 'company', subtitle: '作成者の情報' }
       ]

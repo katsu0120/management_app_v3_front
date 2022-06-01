@@ -4,7 +4,8 @@
     dence
     elevation="1"
     :clipped-left="clippedLeft"
-    color="white"
+    color="grey darken-3"
+    height="56"
   >
     <slot name="navigation-toggle-button" />
 
@@ -19,7 +20,7 @@
     <nuxt-link
       :to="homePath"
       dark
-      class="text-decoration-none"
+      class="white--text text-decoration-none"
     >
       <app-title
         :class="{ 'hidden-mobile-and-down' : isNotHomePath }"
@@ -29,6 +30,7 @@
     <!-- page title -->
     <logged-in-app-bar-breadcrumbs
       v-if="isNotHomePath"
+      class="white--text"
     />
 
     <v-spacer />

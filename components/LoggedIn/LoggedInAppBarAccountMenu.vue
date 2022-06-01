@@ -7,10 +7,13 @@
   >
     <template #activator="{ on }">
       <v-btn
+        color="grey lighten-2"
         icon
         v-on="on"
       >
-        <v-icon>
+        <v-icon
+          size="30"
+        >
           mdi-account-circle
         </v-icon>
       </v-btn>

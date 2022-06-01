@@ -8,9 +8,9 @@
     <v-img
       id="scroll-top"
       dark
-      src="https://picsum.photos/id/7/1920/1080?blur=5"
-      gradient="to top right, rgba(19,84,122,.6), rgba(128,208,199,.9)"
+      :src="TopImg"
       :height="imgHeight"
+      class="mt-14"
     >
       <v-row
         align="center"
@@ -21,14 +21,17 @@
           cols="12"
           class="text-center"
         >
-          <h1 class="display-1 mb-4">
-            未来を作ろう。ワクワクしよう。
+          <h1
+            class="display-1 mb-4 black--text"
+            color="black"
+          >
+            使いたいを追求したプロジェクト管理ツール
           </h1>
           <h4
-            class="subheading"
+            class="subheading black--text"
             :style="{ letterSpacing: '5px' }"
           >
-            使いたいを追求したProject管理ツール
+            直感的で論理的なワクワク体験を
           </h4>
         </v-col>
       </v-row>
@@ -68,23 +71,22 @@
 
 <script>
 import HomeAbout from '~/components/Home/HomeAbout'
-import HomeProducts from '~/components/Home/HomeProducts'
 import HomeCompany from '~/components/Home/HomeCompany'
+import TopImg from '~/assets/images/KAZUKIcghvbnkm_TP_V.jpg'
 
 export default {
   name: 'PagesIndex',
   components: {
     HomeAbout,
-    HomeProducts,
     HomeCompany
   },
   middleware: ['logged-in-redirect'],
   data () {
     return {
       imgHeight: 500,
+      TopImg,
       menus: [
-        { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理サイトです' },
-        { title: 'products', subtitle: '直感でわかりやすい操作' },
+        { title: 'about', subtitle: 'このサイトはプロジェクト管理を行う為の業務管理プロダクトです' },
         { title: 'company', subtitle: '作成者の情報' }
       ]
     }

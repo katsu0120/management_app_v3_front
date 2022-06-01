@@ -61,7 +61,7 @@ export default {
     return {
       mobileBreakpoint: 960,
       navMenus: [
-        { name: 'company-id-CompanyDetails', icon: 'mdi-share-all' },
+        { name: 'company-id-CompanyDetails', icon: 'mdi-share-all', color: 'red' },
         { name: 'company-id-CompanyCompletedDetails', icon: 'mdi-calendar-check' },
         { name: 'company-id-CompanyUsers', icon: 'mdi-account-group-outline' }
       ]

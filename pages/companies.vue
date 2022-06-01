@@ -251,13 +251,21 @@ export default {
   },
   methods: {
     async createCompany () {
-      this.loading = true
-      await this.$axios.$post('api/v1/companies', this.params)
-        .then(response => this.successCompanyCreate(response))
-        .catch(error => this.failureCompanyCreate(error))
-      this.loading = false
-      this.newCompanyDialog = false
-      this.params.company.name = ''
+      if (this.params.company.name === '') {
+        const color = '#D50000'
+        const msg = 'カンパニー名を入力して下さい😀'
+        const timeout = '4000'
+        console.log('から')
+        this.$store.dispatch('getToast', { msg, color, timeout })
+      } else {
+        this.loading = true
+        await this.$axios.$post('api/v1/companies', this.params)
+          .then(response => this.successCompanyCreate(response))
+          .catch(error => this.failureCompanyCreate(error))
+        this.loading = false
+        this.newCompanyDialog = false
+        this.params.company.name = ''
+      }
     },
     successCompanyCreate (response) {
       const companyId = response.id

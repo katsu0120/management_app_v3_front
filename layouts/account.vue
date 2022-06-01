@@ -7,6 +7,7 @@
       <app-toaster />
       <nuxt />
     </v-main>
+    <app-footer />
   </v-app>
 </template>
 

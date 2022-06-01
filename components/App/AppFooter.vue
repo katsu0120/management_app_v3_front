@@ -3,7 +3,7 @@
     <v-footer
       absolute
       dark
-      color="black"
+      color="grey darken-3"
       :height="height"
     >
       <v-col
@@ -26,7 +26,7 @@ export default {
   data ({ $config: { appName } }) {
     return {
       appName,
-      height: 32
+      height: 45
     }
   },
   computed: {

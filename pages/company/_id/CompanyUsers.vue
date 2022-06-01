@@ -299,7 +299,8 @@ export default {
     currentCompany () {
       const id = this.$store.state.company.current.id
       const name = this.$store.state.company.current.name
-      return { id, name }
+      const oldName = this.$store.state.company.current.name
+      return { id, name, oldName }
     },
     // 参加ユーザー
     companyUsers () {
@@ -427,6 +428,9 @@ export default {
     },
     // Companyの名前を変更メソッド---------------------------------------------
     async companyNameChange () {
+      if (this.currentCompany.name === this.currentCompany.oldName) {
+        return
+      }
       const sure = confirm('カンパニー名を変更します。よろしいですか？')
       if (sure) {
         this.params.company.id = this.currentCompany.id
