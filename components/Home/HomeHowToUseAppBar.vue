@@ -1,8 +1,8 @@
 <template>
   <v-app-bar
     app
-    :height="homeAppBarHeight"
-    color="white"
+    height="56"
+    color="grey darken-3"
   >
     <nuxt-link
       :to="'/'"
@@ -12,7 +12,7 @@
     </nuxt-link>
     <nuxt-link
       :to="'/'"
-      class="text-decoration-none"
+      class="white--text text-decoration-none"
     >
       <app-title
         class="hidden-mobile-and-down"
