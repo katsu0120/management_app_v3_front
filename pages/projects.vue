@@ -225,7 +225,7 @@
 </template>
 
 <script>
-import homeImg from '~/assets/images/logged-in/DaenerysTargaryen_Monochromatic.png'
+import homeImg from '~/assets/images/pakutaso/kazukiphotomon05_TP_V.jpg'
 export default {
   name: 'PagesProjects',
   layout: 'logged-in',

@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import companyProjectsImg from '~/assets/images/logged-in/Dream_Monochromatic.png'
+import companyProjectsImg from '~/assets/images/pakutaso/KAZ19514005_TP_V.jpg'
 export default {
   layout: 'company-details',
   middleware: ['get-company-current', 'get-company-project-list'],

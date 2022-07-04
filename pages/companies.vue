@@ -207,7 +207,7 @@
 </template>
 
 <script>
-import companyImg from '~/assets/images/logged-in/City buildings_Flatline.png'
+import companyImg from '~/assets/images/pakutaso/KAZU-bgftdrtfgh_TP_V.jpg'
 export default {
   name: 'PagesAccount',
   layout: 'company',

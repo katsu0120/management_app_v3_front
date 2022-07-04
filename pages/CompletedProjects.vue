@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import dashboardImg from '~/assets/images/logged-in/Data storage_Monochromatic.png'
+import dashboardImg from '~/assets/images/pakutaso/20140613-P6130019_TP_V.jpg'
 export default {
   name: 'PagesProjects',
   layout: 'completed-project',

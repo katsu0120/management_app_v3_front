@@ -231,7 +231,7 @@
 </template>
 
 <script>
-import companyProjectsImg from '~/assets/images/logged-in/Conference presentation _Monochromatic.png'
+import companyProjectsImg from '~/assets/images/pakutaso/KAZUKIhgfdrfgh_TP_V.jpg'
 export default {
   layout: 'company-details',
   middleware: ['get-company-current', 'get-company-project-list', 'get-company-users-owner'],
